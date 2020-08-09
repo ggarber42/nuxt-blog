@@ -1,0 +1,39 @@
+///////////
+//Colors//
+///////////
+$primary: #2f333f;
+$primary-light: lighten($primary, 20%);
+$primary-lighter: lighten($primary, 30%);
+$secondary: #d5dde0;
+$accent: #504ec9;
+$grey-1: #444444;
+$background-primary: #13151b;
+$background-secondary: #fff;
+$background-secondary-darker: #000000;
+//////////////
+//Typography//
+/////////////
+$ff-primary: 'Source Sans Pro', sans-serif;
+$ff-secondary: 'Source Code Pro', monospace;
+$fs-body: 1.6rem;
+$fs-body-responsive: 1.4rem;
+$fs-large: 3rem;
+$fs-large-responsive: 2rem;
+$fs-small: $fs-body-responsive;
+$fs-small-responsive: 1rem;
+$fs-h1: $fs-large;
+$fs-h2: $fs-large;
+$fs-h3: 2rem;
+$fs-h4: $fs-body;
+$fs-h5: $fs-body;
+$fs-h6: $fs-small;
+$fw-bold: 900;
+$fw-reg: 300;
+//////////////
+//Screen Size/
+/////////////
+$screen-xs: 375px;
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1140px;
+$screen-xlg: 1900px;

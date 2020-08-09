@@ -1,0 +1,22 @@
+@media (max-width: $screen-xs){
+    .container {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+@media (max-width: $screen-md){
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+@media (min-width: $screen-md){
+    .container {
+        width: 60%;
+        margin: 0 auto;
+    }
+}
+
+.center{
+    text-align: center;
+}

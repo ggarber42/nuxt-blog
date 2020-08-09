@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: $background-secondary;
+  color: $primary;
+  font-family: $ff-primary;
+  font-size: $fs-body;
+  line-height: 1.6;
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  strong {
+    font-weight: $fw-bold;
+  }
+
+  p{
+    font-size: $fs-small;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  main {
+    min-height: calc(90vh - 40px);
+    margin-top: 10vh;
+  }
+
+  footer {
+    min-height: 20px;
+    margin-top: 10vh;
+    background: $primary;
+  }
+}

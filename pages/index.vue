@@ -8,7 +8,7 @@
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque architecto eum, non illo odit repellendus dolores molestiae! Tempora maxime est quod aliquam quas animi facilis officia voluptates, molestiae quos deleniti!
       </p>
     </section>
-    <section class="container">
+    <section class="container blog-list">
       <NuxtLink to="/blog">
         <h4>Últimos Posts</h4>
       </NuxtLink>
@@ -43,5 +43,11 @@
 </script>
 
 <style lang="scss" scoped>
-  
+  .introduction{
+
+  }
+
+  .blog-list{
+    
+  }
 </style>

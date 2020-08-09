@@ -12,6 +12,10 @@ body {
   font-size: $fs-body;
   line-height: 1.6;
 
+  &.overlay{
+    background: #000;
+  }
+
   img {
     display: block;
     max-width: 100%;
@@ -35,7 +39,7 @@ body {
 
   main {
     min-height: calc(90vh - 40px);
-    margin-top: 10vh;
+    margin-top: 20vh;
   }
 
   footer {

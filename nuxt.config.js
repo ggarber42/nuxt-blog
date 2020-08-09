@@ -31,7 +31,7 @@ export default {
   */
   css: [
     'normalize.css/normalize.css',
-    '@/assets/styles/main.scss'
+    '@/assets/styles/main.scss',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -55,7 +55,7 @@ export default {
   modules: [
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
   ],
   /*
   ** Content module configuration

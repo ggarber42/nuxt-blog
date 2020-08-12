@@ -25,5 +25,6 @@ export default {
 .footer__copyright{
     color: #fff;
     font-size: 1rem;
+    text-align: center;
 }
 </style>

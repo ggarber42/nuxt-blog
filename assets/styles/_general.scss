@@ -24,6 +24,7 @@ body {
   a {
     color: inherit;
     text-decoration: none;
+    padding: 0;
   }
   strong {
     font-weight: $fw-bold;
@@ -35,6 +36,27 @@ body {
 
   ul {
     list-style: none;
+    padding: 0;
+  }
+
+  h1{
+    font-size: $fs-h1;
+  }
+
+  h2{
+    font-size: $fs-h2;
+  }
+
+  h3{
+    font-size: $fs-h3;
+  }
+
+  h4{
+    font-size: $fs-h4;
+  }
+
+  h5{
+    font-size: $fs-h5;
   }
 
   main {

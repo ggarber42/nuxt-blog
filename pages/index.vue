@@ -7,7 +7,7 @@
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque architecto eum, non illo odit repellendus dolores molestiae! Tempora maxime est quod aliquam quas animi facilis officia voluptates, molestiae quos deleniti!</p>
     </section>
     <section class="container blog-list">
-      <NuxtLink to="/blog">
+      <NuxtLink title="Ver posts" to="/blog">
         <h2 class="blog-list__title">Últimos Posts</h2>
       </NuxtLink>
       <ul>
@@ -115,30 +115,5 @@ export default {
     padding: 0.75em;
   }
 
-  .blog-list {
-    &__title {
-      color: $grey-2;
-    }
-    &__article {
-      display: flex;
-      flex-direction: column;
-      margin: 1em 0;
-      border: 1px solid #d6d6d6;
-      transition: border-width 0.1s linear;
-
-      &__updated {
-        color: $grey-2;
-        align-self: flex-end;
-      }
-
-      &__description {
-        text-align: center;
-      }
-      &:hover,
-      &:focus {
-        border: 1.05px solid $accent;
-      }
-    }
-  }
 }
 </style>

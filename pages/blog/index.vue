@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="main">
     <section class="container">
       <AppSearchInput />
     </section>
-    <section class="container">
-      <h2>Todos os Posts</h2>
+    <section class="container blog-list">
       <ul>
         <li v-for="article of articles" :key="article.slug">
           <NuxtLink :to="{ name: 'blog-slug', params: { slug: article.slug } }">
-            <div>
-              <h2>{{ article.title }}</h2>
-              <p>{{ article.description }}</p>
+            <div class="blog-list__article">
+               <small class="blog-list__article__updated">{{ formatDate(article.updatedAt) }}</small>
+              <h3 class="blog-list__article__title">{{ article.title }}</h3>
+              <p class="blog-list__article__description">{{ article.description }}</p>
             </div>
           </NuxtLink>
         </li>
@@ -36,6 +36,23 @@
       return {
         articles
       }
+    },
+  methods: {
+    formatDate(date) {
+      console.log(date);
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return new Date(date).toLocaleDateString("pt-BR", options);
     }
   }
+  }
 </script>
+
+<style lang="scss" scoped>
+.main{
+  .search-bar{
+    margin-bottom: 3vh;
+    position: relative;
+    
+  }
+}
+</style>

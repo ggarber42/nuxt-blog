@@ -3,7 +3,7 @@
     <div class="logo">
       <NuxtLink to="/">
         <img
-          title="home"
+          title="Home"
           src="https://img.icons8.com/clouds/100/000000/periscope-logo.png"
           style="width:60%"
         >
@@ -81,6 +81,7 @@ header.header {
   display: flex;
   justify-content: space-between;
   position: fixed;
+  z-index: 10;
   width: 100%;
   top: 0;
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.2);
@@ -108,7 +109,7 @@ header.header {
 
   button.hamburger {
 
-    z-index: 4;
+    z-index: 13;
 
     .hamburger-box {
       span {
@@ -130,7 +131,7 @@ header.header {
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 2;
+    z-index: 11;
     background: black;
     opacity: .75;
     transition: all 250ms cubic-bezier(0.5, 0, 0.5, 1);
@@ -151,7 +152,7 @@ header.header {
     bottom: 0;
     right: 0;
     left: calc(100vw - 300px);
-    z-index: 3;
+    z-index: 12;
     transform: translateX(100%);
     transition: transform 250ms cubic-bezier(0.5, 0, 0.5, 1);
     background-color: $background-secondary;

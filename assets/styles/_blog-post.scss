@@ -1,0 +1,52 @@
+@media (max-width: $screen-xs) {
+  .blog-post {
+    .nuxt-content {
+      h2 {
+        font-size: $fs-body;
+      }
+      pre{
+          border-radius: 0;
+          code{
+              font-size: $fs-small-responsive;
+              & *{
+                font-size: inherit;
+              }
+          }
+      }
+    }
+  }
+}
+@media (min-width: $screen-xs) {
+  .blog-post {
+    .nuxt-content {
+      h2 {
+        font-size: 1.75rem;
+      }
+    }
+  }
+}
+@media (min-width: $screen-md) {
+  .blog-post {
+    .nuxt-content {
+      h2 {
+        font-size: $fs-h2;
+      }
+    }
+  }
+}
+.blog-post {
+  .nuxt-content {
+    // background: red;
+    .nuxt-content-highlight{
+        position: relative;
+        // cursor: text;
+        .filename{
+            position: absolute;
+            font-size: 1rem;
+            right: 0;
+            color: $grey-2;
+            padding: 0 .25em;
+        }
+    }
+  }
+}

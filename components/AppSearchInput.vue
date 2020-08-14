@@ -84,6 +84,10 @@ export default {
     padding: .25em 1em;
     border-radius: .5em;
     border: 1.5px solid $grey-2;
+    &:focus{
+      outline: none;
+      border-color: $accent;
+    }
   }
   &__result-list{
       background: $background-secondary;

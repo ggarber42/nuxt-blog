@@ -3,29 +3,22 @@
     <!-- introduction -->
     <section class="container introduction">
       <h1 class="introduction__title">Bem Vindo ao DeviaSerDev</h1>
-
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque architecto eum, non illo odit repellendus dolores molestiae! Tempora maxime est quod aliquam quas animi facilis officia voluptates, molestiae quos deleniti!</p>
     </section>
-    <section class="container blog-list">
+    <!-- blog list -->
+    <BlogList v-bind:articles="articles"/>
+    <!-- blog anchor -->
+    <section class="container blog-anchor">
       <NuxtLink title="Ver posts" to="/blog">
-        <h2 class="blog-list__title">Últimos Posts</h2>
+        <small class="blog-anchor__text">Ver todos</small>
       </NuxtLink>
-      <ul>
-        <li v-for="article of articles" :key="article.slug">
-          <NuxtLink :to="{ name: 'blog-slug', params: { slug: article.slug } }">
-            <div class="blog-list__article">
-              <small class="blog-list__article__updated">{{ formatDate(article.updatedAt) }}</small>
-              <h3 class="blog-list__article__title">{{ article.title }}</h3>
-              <p class="blog-list__article__description">{{ article.description }}</p>
-            </div>
-          </NuxtLink>
-        </li>
-      </ul>
     </section>
   </div>
 </template>
 
 <script>
+import BlogList from "../components/BlogList";
+
 export default {
   async asyncData({ $content, params }) {
     const articles = await $content("articles", params.slug)
@@ -49,10 +42,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 @media (max-width: $screen-sm) {
   .main {
-  
     .introduction__title {
       font-size: $fs-h3;
     }
@@ -73,14 +64,13 @@ export default {
   }
 }
 @media (min-width: $screen-sm) {
-
   .main {
     // background: red;
     font-size: $fs-body-responsive;
     .introduction__title {
       font-size: $fs-h1;
     }
-    
+
     .blog-list {
       &__title {
         font-size: $fs-h2;
@@ -114,6 +104,13 @@ export default {
     // border-radius: .35em;
     padding: 0.75em;
   }
-
+   .blog-anchor{
+      &__text{
+        font-size: $fs-body-responsive;
+      }
+      &:hover{
+        color: $accent;
+      }
+    }
 }
 </style>

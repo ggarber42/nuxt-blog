@@ -4,7 +4,9 @@
   box-sizing: border-box;
   margin: 0;
 }
-
+*:focus{
+  outline: none;
+}
 body {
   background-color: $background-secondary;
   color: $primary;
@@ -62,81 +64,6 @@ body {
   main {
     min-height: calc(90vh - 40px);
     margin-top: 20vh;
-  }
-  @media (max-width: $screen-sm) {
-    .main {
-      .introduction__title {
-        font-size: $fs-h3;
-      }
-      .blog-list {
-        &__title {
-          font-size: 2.15rem;
-        }
-        &__article {
-          padding: 1em;
-          &__title {
-            font-size: $fs-body;
-          }
-          &__description {
-            font-size: $fs-body-responsive;
-          }
-        }
-      }
-    }
-  }
-  @media (min-width: $screen-sm) {
-    .main {
-      font-size: $fs-body-responsive;
-      .introduction__title {
-        font-size: $fs-h1;
-      }
-
-      .blog-list {
-        &__title {
-          font-size: $fs-h2;
-        }
-        &__article {
-          padding: 2em 1.15em;
-
-          &__title {
-            font-size: $fs-body;
-          }
-          &__description {
-            font-size: $fs-body;
-          }
-        }
-      }
-    }
-  }
-  .blog-list {
-    &__title {
-      color: $grey-2;
-      display: inline-block;
-      font-weight: $fw-reg;
-      &:hover {
-        color: $accent;
-      }
-    }
-    &__article {
-      display: flex;
-      flex-direction: column;
-      margin: 1em 0;
-      border: 1px solid #d6d6d6;
-      transition: border-width 0.1s linear;
-
-      &__updated {
-        color: $grey-2;
-        align-self: flex-end;
-      }
-
-      &__description {
-        text-align: center;
-      }
-      &:hover,
-      &:focus {
-        border: 1.05px solid $accent;
-      }
-    }
   }
 
   footer {

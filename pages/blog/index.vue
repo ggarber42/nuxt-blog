@@ -3,7 +3,8 @@
     <section class="container">
       <AppSearchInput />
     </section>
-    <section class="container blog-list">
+    <BlogList v-bind:articles="articles" />
+    <!-- <section class="container blog-list">
       <ul>
         <li v-for="article of articles" :key="article.slug">
           <NuxtLink :to="{ name: 'blog-slug', params: { slug: article.slug } }">
@@ -16,7 +17,7 @@
         </li>
       </ul>
 
-    </section>
+    </section> -->
 
   </div>
 </template>
@@ -26,10 +27,12 @@
 </style>
 
 <script>
+  import BlogList from '~/components/BlogList';
+
   export default {
     async asyncData({ $content, params }) {
       const articles = await $content('articles', params.slug)
-        .only(['title', 'description','slug'])
+        .only(['title', 'description','slug','updatedAt'])
         .sortBy('createdAt', 'asc')
         .fetch()
 
@@ -37,6 +40,9 @@
         articles
       }
     },
+  components:{
+    BlogList
+  },
   methods: {
     formatDate(date) {
       console.log(date);

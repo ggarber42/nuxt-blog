@@ -1,36 +1,36 @@
-@media (max-width: $screen-xs) {
-  .blog-post {
-    .nuxt-content {
-      h2 {
-        font-size: $fs-body;
-      }
-      pre{
-          border-radius: 0;
-          code{
-              font-size: $fs-small-responsive;
-              & *{
-                font-size: inherit;
-              }
-          }
-      }
-    }
-  }
-}
-@media (min-width: $screen-xs) {
+@media (max-width: $screen-sm) {
   .blog-post {
     .nuxt-content {
       h2 {
         font-size: 1.75rem;
       }
+      pre{
+        border-radius: 0;
+        code{
+            font-size: 1.15rem;
+            & *{
+              font-size: inherit;
+            }
+        }
+    }
     }
   }
 }
-@media (min-width: $screen-md) {
+@media (min-width: $screen-sm) {
   .blog-post {
     .nuxt-content {
       h2 {
         font-size: $fs-h2;
       }
+      pre{
+        border-radius: 0;
+        code{
+            font-size: $fs-small;
+            & *{
+              font-size: inherit;
+            }
+        }
+    }
     }
   }
 }
@@ -39,7 +39,6 @@
     // background: red;
     .nuxt-content-highlight{
         position: relative;
-        // cursor: text;
         .filename{
             position: absolute;
             font-size: 1rem;
@@ -47,6 +46,7 @@
             color: $grey-2;
             padding: 0 .25em;
         }
+
     }
   }
 }

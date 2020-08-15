@@ -26,7 +26,17 @@ export default {
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString("pt-BR", options);
     }
-  }
+  },
+   head () {
+      return {
+        title: this.article.title,
+        meta: [
+          { name: "author", content: "Marina Aisa" },
+          { property: "og:title", content: this.article.title },
+          { name: "description", property: "og:description", content: this.article.description, hid: "description" },
+        ]
+      };
+    }
 };
 </script>
 

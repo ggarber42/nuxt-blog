@@ -47,6 +47,7 @@ export default {
 @media (max-width: $screen-sm){
     .search-bar{
   color: $accent;
+  max-width: 70%;;
   input{
     width: 100%;
     padding: .25em 1em;
@@ -71,14 +72,12 @@ export default {
   }
 }
 @media (min-width: $screen-sm){
-    .container {
-        width: 90%;
-        margin: 0 auto;
+    .search-bar{
+      min-width: 600px;
     }
 }
 .search-bar{
   color: $accent;
-  text-align: center;
   input{
     width: 100%;
     padding: .25em 1em;

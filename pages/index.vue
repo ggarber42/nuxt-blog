@@ -2,7 +2,7 @@
   <div class="main">
     <!-- introduction -->
     <section class="container introduction">
-      <h1 class="introduction__title">Bem Vindo ao DeviaSerDev</h1>
+      <h1 class="introduction__title">Bem Vindo ao <span class="accent-highlight">DeviaSerDev</span></h1>
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque architecto eum, non illo odit repellendus dolores molestiae! Tempora maxime est quod aliquam quas animi facilis officia voluptates, molestiae quos deleniti!</p>
     </section>
     <!-- blog list -->
@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     formatDate(date) {
-      console.log(date);
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString("pt-BR", options);
     }
@@ -100,13 +99,18 @@ export default {
   }
 
   .introduction {
-    border-bottom: 1px dotted $accent;
+    border-bottom: 1px dashed $grey-2;
     // border-radius: .35em;
     padding: 0.75em;
+    .accent-highlight{
+      color: $accent;
+      text-decoration: underline;
+    }
   }
    .blog-anchor{
       &__text{
         font-size: $fs-body-responsive;
+        text-decoration: underline;
       }
       &:hover{
         color: $accent;

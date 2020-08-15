@@ -76,11 +76,11 @@ export default {
     }
   }
   .blog-list {
+    max-width: 700px;
     &__title {
       color: $grey-2;
       display: inline-block;
       font-weight: $fw-reg;
-      
     }
     &__article {
       display: flex;
@@ -94,8 +94,13 @@ export default {
         align-self: flex-end;
       }
 
+      &__title{
+        align-self: center;
+      }
+
       &__description {
         text-align: center;
+        align-self: center;
       }
       &:hover,
       &:focus {

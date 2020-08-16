@@ -2,17 +2,19 @@
   <header class="header">
     <div class="logo">
       <NuxtLink to="/">
-        <img
+        <!-- <img
           title="Home"
           src="https://img.icons8.com/clouds/100/000000/periscope-logo.png"
           style="width:60%"
-        >
+        > -->
+        <!-- D&ltS/&gtD -->
+        D{S}D
       </NuxtLink>
     </div>
     <nav class="horizontal-nav">
       <NuxtLink to="/blog">Blog</NuxtLink>
-      <a target="_blank" href="https://www.google.com.br/">Contato</a>
-      <a target="_blank" href="https://www.google.com.br/">Sobre</a>
+      <!-- <a target="_blank" href="https://www.google.com.br/">Contato</a> -->
+      <!-- <a target="_blank" href="https://www.google.com.br/">Sobre</a> -->
     </nav>
     <button class="hamburger hamburger--emphatic" type="button" @click="toggleHamburger">
       <span class="hamburger-box">
@@ -85,6 +87,11 @@ header.header {
   width: 100%;
   top: 0;
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.2);
+
+  .logo{
+    display: flex;
+    align-items: center;
+  }
 
   nav{
     a {

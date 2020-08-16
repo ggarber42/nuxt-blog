@@ -2,14 +2,19 @@
   <footer>
     <div class="footer__info">
       <div class="container footer__info-container">
-         <div class="footer__tech">
+        <div class="footer__tech">
           </> com <a target="_blank" href="https://vuejs.org/">Vue.js</a> + <a target="_blank" href="https://nuxtjs.org/">Nuxt</a>
-          </div> 
-        <div class="footer__copyright">
-          © {{ year }} — Garber 
+        </div> 
+        <div class="footer__icons">
+          <div class="footer__icons__rss">
+            <a clas="footer__icons__rss__link"  title="feed" href="/feed.xml" target="_blank">
+              <img src="~assets/images/rss_icon.png" alt="" style="max-width: 35px">
+            </a>
+          </div>
         </div>
-        <a href="#top" class="footer__top-page">
-        </a>
+        <div class="footer__copyleft">
+          &#127279 {{ year }} — Garber 
+        </div>
       </div>
     </div>
   </footer>
@@ -38,6 +43,12 @@ export default {
     color: $accent;
     &:hover{
       text-decoration: underline;
+    }
+  }
+  .footer__icons{
+    &__rss{
+      display: flex;
+      justify-content: center;
     }
   }
 }

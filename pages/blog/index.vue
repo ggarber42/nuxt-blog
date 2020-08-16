@@ -30,7 +30,17 @@
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString("pt-BR", options);
     }
-  }
+  },
+   head () {
+      return {
+        title: 'Blog Posts | DeviaSerDev',
+        meta: [
+          { name: "author", content: "Guilherme Garber" },
+          { property: "og:title", content: 'Blog Posts | DeviaSerDev'},
+          { name: "description", property: "og:description", content: 'listagem de todos os posts', hid: "description" },
+        ]
+      };
+    }
   }
 </script>
 

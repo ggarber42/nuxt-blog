@@ -36,7 +36,17 @@ export default {
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString("pt-BR", options);
     }
-  }
+  },
+   head () {
+      return {
+        title: "DeviaSerDev",
+        meta: [
+          { name: "author", content: "Guilherme Garber" },
+          { property: "og:title", content: "DeviaSerDev"},
+          { name: "description", property: "og:description", content: "DeviaSerDev", hid: "description" },
+        ]
+      };
+    }
 };
 </script>
 

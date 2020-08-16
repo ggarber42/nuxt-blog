@@ -29,10 +29,10 @@ export default {
   },
    head () {
       return {
-        title: this.article.title,
+        title: this.article.title+"| DeviaSerDev",
         meta: [
-          { name: "author", content: "Marina Aisa" },
-          { property: "og:title", content: this.article.title },
+          { name: "author", content: "Guilherme Garber" },
+          { property: "og:title", content: this.article.title},
           { name: "description", property: "og:description", content: this.article.description, hid: "description" },
         ]
       };

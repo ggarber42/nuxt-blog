@@ -8,7 +8,11 @@
           style="width:60%"
         > -->
         <!-- D&ltS/&gtD -->
-        D{S}D
+        <img
+          title="Home"
+          src="~/assets/images/1.png"
+          style="width:100px"
+        >
       </NuxtLink>
     </div>
     <nav class="horizontal-nav">
@@ -102,16 +106,20 @@ header.header {
       font-size: $fs-small;
 
       &:hover {
-        border-bottom: 2px solid $accent;
+        // border-bottom: 2px solid $accent;
         color: $accent;
       }
     }
   }
 
   nav.horizontal-nav {
+    // display: flex;
     justify-content: space-evenly;
+    // align-items: center;
+    // align-self: center;
     min-width: 25%;
-    margin-right: 5vw;
+    margin: auto 0;
+    // margin-right: 5vw;
   }
 
   button.hamburger {

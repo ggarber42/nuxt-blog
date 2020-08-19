@@ -27,7 +27,7 @@ export default {
       }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favgit remote add origin https://github.com/ggarber42/nuxt-blog.git.png' },
       {
         rel: 'stylesheet',
         href:

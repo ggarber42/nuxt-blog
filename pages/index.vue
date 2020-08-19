@@ -44,7 +44,8 @@ export default {
           { name: "author", content: "Guilherme Garber" },
           { property: "og:title", content: "DeviaSerDev"},
           { name: "description", property: "og:description", content: "DeviaSerDev", hid: "description" },
-        ]
+        ],
+        script: [{ src: 'https://identity.netlify.com/v1/netlify-identity-widget.js' }]
       };
     }
 };

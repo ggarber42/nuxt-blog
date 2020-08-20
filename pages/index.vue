@@ -3,7 +3,8 @@
     <!-- introduction -->
     <section class="container introduction">
       <h1 class="introduction__title">Bem Vindo ao <span class="accent-highlight">DeviaSerDev</span></h1>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque architecto eum, non illo odit repellendus dolores molestiae! Tempora maxime est quod aliquam quas animi facilis officia voluptates, molestiae quos deleniti!</p>
+      <p>Nesse blog eu vou compartilhar projetos, escrever  tutoriais e também relatar algumas experiências. Foi uma maneira que achei de estudar e quem sabe compartilhar um pouco do que aprendi</p>
+      <p>Caso queria entrar em contato, meu site de contato é <a href="#">aqui</a>.</p>
     </section>
     <!-- blog list -->
     <BlogList v-bind:articles="articles"/>

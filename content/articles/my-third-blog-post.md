@@ -1,21 +1,17 @@
 ---
-title: My third Blog Post
-description: Learning how to use @nuxt/content to create a blog
+title: Olá mundo
+description: primeiro post
 alt: my first blog post
+date: 2020-08-20T00:01:23.648Z
 ---
+Olá visitante aleatório,
 
-## This is a heading
+Caso tenha chego até aqui por um motivo qualquer, vou deixar aqui minha rápida introdução.
 
-This is some more info
+A ideia desse blog é compartilhar meus estudos e também relatar um pouco desse processo. Há algum tempo venho escrevendo tutoriais para mim mesmo e achei que seria uma boa os tornar públicos.
 
-## This is another heading
+Ainda não sei como será a organização no geral, por enquanto vou deixar no próprio post o código para ser copiado. Até o próximo **Post**.
 
-
-```js[nuxt.config.js]
-export default {
-  nuxt: "is the best"
-}
-```
-```html[my-first-blog-post.md]
-<p>code styling is easy</p>
+```javascript
+console.log('hello world');
 ```

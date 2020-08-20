@@ -34,6 +34,13 @@ body {
 
   p {
     font-size: $fs-small;
+    margin-bottom: .75em;
+    a{
+      color: $accent;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
   }
 
   ul {
@@ -64,6 +71,15 @@ body {
   main {
     min-height: calc(90vh - 40px);
     margin-top: 20vh;
+  }
+
+  code{
+    
+    span{
+      &.token.console.class-name{
+        text-decoration: none;
+      }
+    }
   }
 
   footer {

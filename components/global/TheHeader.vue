@@ -18,7 +18,7 @@
     <nav class="horizontal-nav">
       <NuxtLink to="/blog">Blog</NuxtLink>
       <!-- <a target="_blank" href="https://www.google.com.br/">Contato</a> -->
-      <!-- <a target="_blank" href="https://www.google.com.br/">Sobre</a> -->
+      <a target="_blank" href="#">Sobre</a>
     </nav>
     <button class="hamburger hamburger--emphatic" type="button" @click="toggleHamburger">
       <span class="hamburger-box">
@@ -29,8 +29,8 @@
     <nav class="vertical-nav" @click="toggleHamburger">
       <NuxtLink to="/">Home</NuxtLink>
       <NuxtLink to="/blog">Blog</NuxtLink>
-      <a target="_blank" href="https://www.google.com.br/">Contato</a>
-      <a target="_blank" href="https://www.google.com.br/">Sobre</a>
+      <!-- <a target="_blank" href="https://www.google.com.br/">Contato</a> -->
+      <a href="#">Sobre</a>
     </nav>
   </header>
 </template>

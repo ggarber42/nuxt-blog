@@ -38,6 +38,8 @@ export default {
       .blog-list {
         &__title {
           font-size: 2.15rem;
+          width: 100%;
+          text-align: center;
         }
         &__article {
           padding: 1em;

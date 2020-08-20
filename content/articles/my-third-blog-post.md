@@ -12,6 +12,6 @@ A ideia desse blog é compartilhar meus estudos e também relatar um pouco desse
 
 Ainda não sei como será a organização no geral, por enquanto vou deixar no próprio post o código para ser copiado. Até o próximo **Post**.
 
-```javascript
+```cwl
 console.log('hello world');
 ```

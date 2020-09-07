@@ -17,10 +17,11 @@ Para o ativar:
 
 ```console[terminal]
 foo@bar:~$ source venv/bin/activate
+(venv) foo@bar:~$
 ```
 
 e desativar:
 
 ```console[terminal]
-foo@bar:~$ deactivate
+(venv) foo@bar:~$ deactivate
 ```

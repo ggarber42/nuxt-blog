@@ -18,6 +18,8 @@ foo@bar:~$ yarn add env-cmd
 foo@bar:~$ yarn add moment  
 foo@bar:~$ yarn add moment-locales-webpack-plugin
 foo@bar:~$ yarn add gatsby-remark-prismjs prismjs
+foo@bar:~$ yarn add normalize.css
+foo@bar:~$ yarn add styled-normalize
 ```
 
 e por último os plugins

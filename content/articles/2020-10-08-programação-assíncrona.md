@@ -57,4 +57,6 @@ Nosso amigo, o especialista em corvídeos, fez um mapa das redes de ninhos de co
 
 [imagem]
 
-É um exemplo impressionante de convergência na evolução, computadores de corvos rodam JavaScript. Nese capítulo, iremos escrever algumas funções básicas de redes para eles.
+É um exemplo impressionante de convergência na evolução, computadores de corvos rodam JavaScript. Neste capítulo, iremos escrever algumas funções básicas de redes para eles.
+
+## _Callbacks_

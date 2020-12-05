@@ -60,3 +60,97 @@ Nosso amigo, o especialista em corvídeos, fez um mapa das redes de ninhos de co
 É um exemplo impressionante de convergência na evolução, computadores de corvos rodam JavaScript. Neste capítulo, iremos escrever algumas funções básicas de redes para eles.
 
 ## _Callbacks_
+
+Uma forma de programação assíncrona é fazer funções que executam ações lentas recebam um argumento extra, uma função _callback_. A ação inicia e quando ela termina, a função _callback_ é chamada e executada.
+
+Por exemplo, a função _setTimeout_, disponível tanto em Node.js quanto em navegadores, el espera um dado número de milissegundos (um segundo equivale a mil milissegundos) e então chama a função.
+
+```js
+setTimeout(() => console.log("Tick"), 500);
+```
+
+Esperar não é em geral uma tarefa muito importante, mas pode ser útil ao fazer algo como atualizar uma animação ou verificar se algo está levando mais tempo do um dado tempo.
+
+Realizar várias ações assíncronas em sequência utilizando _callbacks_ significa que você precisa continuar passando novas funções para lidar com a continuação da computação após cada ação.
+
+A maioria dos computadores de ninho de corvo possuem bulbos de armazenamento de dados de longa duração, onde os pedaços de informação estão marcados em galhos para que possam ser acessados depois. Acessar, ou encontrar os pedaços de dados leva um momento, então a interface com o armazenamento de dados é assíncrono e utiliza funções _callback_.
+
+Bulbos de armazenamento guardam pedaços de dado codificação em JSON na forma de nomes. Um corvo pode guardar informações sobre lugares em que está escondido comida no nome de “_caches_ de comida”, que podem guardar um _array_ de nomes de lugares que apontam para outros pedaços de dados, descrevendo um verdadeiro _cache_. Para procurar um _cache_ de comida em um dos bulbos de armazenamento Ninho do Grande Carvalho, um corvo poderia executar o seguinte código:
+
+```js
+import {bigOak} from "./crow-tech";
+
+bigOak.readStorage("food caches", caches => {
+  let firstCache = caches[0];
+  bigOak.readStorage(firstCache, info => {
+    console.log(info);
+  });
+});
+```
+( Todos os nomes e _strings_ foram traduzidas da linguagem dos corvos para Português.)
+
+Esse estilo de programação é funcional, mas a o nível de indentação aumenta a cada ação assíncrona porque você acaba em outra função. Fazendo coisas mais complicadas, como rodar ações múltiplas ao mesmo tempo pode ficar um pouco esquisito.
+
+Ninhos de corvos computacionais são construídos para se comunicar utilizando pares de requisição-respostas. Isso significa que um ninho deve mandar uma requisição para outro, o qual deve imediatamente enviar uma mensagem de resposta, confirmando o recebimento e possivelmente incluindo a resposta da pergunta feita na mensagem.
+
+Cada mensagem é marcada com um tipo, o que vai determinar como ela será tratada. Nosso código pode definir tratamentos específicos para tipos diferentes de requisições, e quando uma requisição chega, o tratamento será chamado para produzir uma resposta.
+
+A interface exportada pelo módulo “./crow-tech” fornece funções baseadas em _callbacks_ para comunicação. Ninhos possuem um método para enviar requisições. Ele espera o nome do ninho de destino, o tipo da requisição e conteúdo da requisição como seu terceiro argumento. E no quarto e último argumento espera a função a ser chamada quando a resposta chegar.
+
+```js
+bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
+            () => console.log("Note delivered."));
+```
+Mas para tornar esses ninhos capazes de receber essa requisição, nós primeiro precisamos definir uma requisição chamada “_note_”. O código que vai tratar com requisições precisa ser executado não apenas no ninho computacional mas em todos ninhos que podem receber mensagens desse tipo. Nós vamos apenas assumir que um corvo vôe e instale nosso código que trata essa requisição em todos os ninhos.
+
+```js
+import {defineRequestType} from "./crow-tech";
+
+defineRequestType("note", (nest, content, source, done) => {
+  console.log(`${nest.name} received note: ${content}`);
+  done();
+});
+```
+
+O _defineRequestType_ é uma função que define um novo tipo de requisição. O exemplo adiciona o suporte para requisições “_note_”, que apenas enviam uma nota para um dado ninho. Nossa implementação chama o _console.log_ para que possamos verificar que a nossa nota chegou. Ninhos possuem uma propriedade _name_  guardada em seus nomes.
+
+O quarto argumento dado ao tratador, _done_, é a função de _callback_ que precisa ser chamada quando a requisição termina. Se tivéssemos utilizado o retorno do tratador como resposta, isso iria significar que o tratador não pode por si só performar uma atividade assíncrona. Uma função realizando um trabalho assíncrono geralmente irá  retornar antes do trabalho terminar,tendo que fazer um arranjo para que o _callback_ seja chamada quando for completado. Portanto, iremos precisar de algum mecanismo assíncrono, nesse caso outra função _callback_ para sinalizar quando a resposta for válida.
+
+De certo modo, assincronicidade é contagiante. Qualquer função que chama uma função que trabalha assincronicamente precisa por si só ser assíncrona. utilizando um _callback_ ou mecanismo similar para entregar resultado. Chamando um _callback_ é algo mais complicado e sujeito a erro do que simplesmente retornar um valor, logo necessita estruturar grandes partes do seu código, o que não é prático.
+
+## _Promises_ (promessas)
+
+Trabalhar com conceitos abstratos é em geral mais fácil quando esses conceitos podem ser representados por valores. No caso de ações assíncronas, você poderia ao invés de arranjar que uma função fosse chamada em algum momento no futuro, retornar um objeto que represente esse evento no futuro.
+
+É pra isso que a classe padrão _Promise_ serve. Uma _promise_ é uma ação assíncrona que pode, em algum momento, produzir um valor. Ela pode notificar qualquer um que estiver interessado quando seu valor estiver disponível.
+
+A maneira mais fácil de criar uma _promise_ é chamando```js Promise.resolve ```. Essa função garante que o valor dado está dentro da _promise_. Se já for uma _promise_, pode ser simplesmente retornado — caso o contrário,  você recebe uma nova _promise_ que imediatamente termina com seu valor como resultado.
+
+```js
+let fifteen = Promise.resolve(15);
+fifteen.then( value => console.log(`Got ${value}`) );
+//→ Got 15
+```
+
+Para conseguir o resultado da _promise_, pode-se utilizar o método```js then ```. Isso registra uma função _callback_ que pode ser chamada quando a _promise_ se resolve e produz um valor. Pode-se adicionar múltiplas _callbacks_ em uma única _promise_, elas serão chamadas, mesmo que sejam adicionados depois da _promise_ ter sido resolvida (terminada).
+
+Porém, isso não é tudo o que o método```js then ```faz. Ele retorna outra _promise_, que resolve o valor que a função tratadora retorna ou, se retornar uma _promise_, espera a _promise_ e depois o seu resultado.
+
+É útil pensar em _promises_ como dispositivos para transportar o valor em uma realidade assíncrona. Um valor normal simplesmente está aqui. Um valor prometido é um valor que pode já estar aqui ou em algum ponto do futuro. Computações definidas em termos de promessas agem em cima desses valores e eles são executados assíncronamente quando o valor se mostra disponível.
+
+Para criar uma _promise_, pode-se utilizar ```js Promise ``` como um construtor. Ele possui uma interface peculiar — o construtor espera uma função como argumento, que é chamada imediatamente, passando uma função que pode ser utilizada para resolver a _promise_. Funciona deste modo, ao invés do exemplo com o método```js resolve ```, para que apenas o código que criou a _promise_ possa resolvê-lo.
+
+Esta é a forma como seria criada uma _promise_ com a sua interface para a  função _redStorage_:
+
+```js
+
+function storage(nest, name) {
+  return new Promise(resolve => {
+    nest.readStorage(name, result => resolve(result));
+  });
+}
+
+storage(bigOak, "enemies")
+  .then(value => console.log("Got", value));
+
+```

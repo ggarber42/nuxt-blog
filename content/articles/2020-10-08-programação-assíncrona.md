@@ -132,7 +132,7 @@ fifteen.then( value => console.log(`Got ${value}`) );
 //→ Got 15
 ```
 
-Para conseguir o resultado da _promise_, pode-se utilizar o método```js then ```. Isso registra uma função _callback_ que pode ser chamada quando a _promise_ se resolve e produz um valor. Pode-se adicionar múltiplas _callbacks_ em uma única _promise_, elas serão chamadas, mesmo que sejam adicionados depois da _promise_ ter sido resolvida (terminada).
+Para conseguir o resultado da _promise_, pode-se utilizar o método```js then ```. Isso registra uma função _callback_ que pode ser chamada quando a _promise_ se resolve e produz um valor. Pode-se adicionar múltiplas _callbacks_ em uma única _promise_, elas serão chamadas, mesmo que sejam adicionadas depois da _promise_ ter sido resolvida (terminada).
 
 Porém, isso não é tudo o que o método```js then ```faz. Ele retorna outra _promise_, que resolve o valor que a função tratadora retorna ou, se retornar uma _promise_, espera a _promise_ e depois o seu resultado.
 
@@ -154,3 +154,145 @@ storage(bigOak, "enemies")
   .then(value => console.log("Got", value));
 
 ```
+
+Essa função assíncrona retorna um valor que tem um propósito. Essa é a vantagem principal das _promises_  — elas simplificam o uso de funções assíncronas. Ao invés de ficar utilizando _callbacks_, funções baseadas em _promises_ (_promise-based_) são parecidas com as convencionais, eles recebem um valor como argumento (_input_) e retornam outro (_output_). A única diferença é que o valor de saída (_output_) pode não estar disponível ainda.
+
+
+## Falhas
+
+Processos computacionais usuais com Javascript podem falhar e causar uma exceção. Computação assíncrona em geral precisa de algo semelhante. A requisição na rede pode falhar, ou algum código na parte assíncrona pode causar uma exceção.
+
+Um dos maiores problemas com o estilo _callback_ de programação assíncrona é que se torna extremamente difícil de fazer com que as falhas sejam corretamente reportadas aos _callbacks_.
+
+Uma convenção amplamente utilizada é que o primeiro argumento do _callback_ seja utilizado para indicar que a função falhou, o segundo contém o valor produzido pela ação quando ela foi bem sucedida. Tais funções de _callback_ precisam sempre verificar se elas receberam uma exceção e garantir que qualquer problema que ela cause, incluindo exceções causadas por outras funções que ela chame, sejam capturadas e dadas para a função correta.
+
+As _promises_ são mais simples. Elas podem tanto ser resolvidas (a ação termina com sucesso) ou rejeitadas (se falharem). Tratadores _resolve_ (como registrados com ``` then ```) são chamados apenas quando a ação é bem sucedida, e rejeições são automaticamente propagadas para a nova _promise_ que é retornada por _then_ . E quando o tratador joga uma exceção, automaticamente faz com que a _promise_ produzida por seu ``` then ``` seja rejeitada. Deste modo, se qualquer um dos elementos da corrente assíncrona falhar, o resultado de toda a corrente é marcada como rejeitado, e nenhum tratador de sucesso é chamado para além do ponto em que ocorre a falha.
+
+Da mesma forma que resolver uma _promise_ gera um valor, rejeitar também o faz, geralmente chamado de motivo da rejeição. Quando uma exceção em uma função tratadora causa uma rejeição, o valor da exceção é utilizado como causa. Semelhantemente, quando um tratador retorna uma _promise_ que foi rejeitada, a rejeição propaga para a próxima _promise_. Há a função ``` Promise.reject ``` que cria uma nova _promise_ que é rejeitada imediatamente.
+
+Para explicitar o tratamento dessas rejeições, _promises_ precisam ter um método ``` catch ``` que registre o tratador que vai ser chamado quando a _promise_ é rejeitada, da mesma forma como o tratador ``` then ``` lida com resoluções normais. É também muito semelhante com o ``` then ```, que resolve o valor original da _promise_ se ela é resolvida normalmente e caso ao contrário, passa o resultado  ao tratador  ``` catch ```. Se o ``` catch ``` jogar um erro, a nova _promise_ também é rejeitada.
+
+De forma abreviada, ``` then ``` também aceita uma rejeição como segundo argumento, então você pode instalar os dois tipos de tratadores em apenas uma chamada de método.
+
+Uma função passada para o construtor da  _Promise_ recebe apenas um segundo argumento, junto com a função de resolução, a qual pode ser usada para rejeitar uma nova _promise_.
+
+A corrente de _promises_ cria valores que são chamados por ``` then ``` e ``` catch ``` que podem ser vistos como um canal pelo qual valores assíncronos ou falhas se movimentam. Já que suas correntes são criadas pelo registro de tratadores, cada elo tem um tratador de sucesso e rejeição (ou ambos) associados. Tratadores que não se igualam ao tipo da conclusão (sucesso ou falha) são ignorados. Contudo, aqueles que se igualam são chamados, e suas conclusões determinam o que vai vir em seguida — sucesso quando ela retornar um valor que não é uma _promise_, rejeição quando jogar uma exceção, e a conclusão de uma _promise_ quando ela retornar uma dessas.
+
+```js
+
+new Promise((_, reject) => reject(new Error("Fail")))
+  .then(value => console.log("Handler 1"))
+  .catch(reason => {
+    console.log("Caught failure " + reason);
+    return "nothing";
+  })
+  .then(value => console.log("Handler 2", value));
+// → Caught failure Error: Fail
+// → Handler 2 nothing
+
+```
+
+De maneira parecida com uma exceção não capturada pelo ambiente, ambientes JavaScript podem detectar quando a rejeição de uma  _promise_ não é tratada e vai reportar um erro.
+
+## Redes são difíceis
+
+De tempos em tempos, não há luz suficiente para o sistema de espelho dos corvos transmitir um sinal ou tem algo bloqueando o caminho do sinal. É possível que um sinal seja enviado e nunca recebido.
+
+Deixando desse jeito, isso iria resultar no _callback_ do ``` send ``` nunca sendo chamado, o que iria provavelmente fazer com que o programa pare sem nunca perceber que há um problema. Seria legal se, após um dado tempo sem nenhuma resposta ( _timeout_ ), uma requisição iria estourar o tempo limite e reportar uma falha.
+
+Geralmente, falhas em transmissões são acidentes aleatórios, como o farol de um carro interferindo num sinal de luz, e simplesmente tentando novamente a requisição pode ser bem sucedida. Então, enquanto estamos nessa, vamos fazer com que nossa função de requisição automaticamente tente novamente enviar a requisição algumas vezes antes de desistir.
+
+E já que estabelecemos que _promises_ são coisas boas, vamos fazer que nossa função de requisição retorne uma _promise_ . Nos termos do que elas podem expressar, _callbacks_ e _promises_ são equivalentes. Funções baseadas em _promises_ pode ser embrulhadas para expor a interface de _promise_ e vice e versa.
+
+Mesmo quando a requisição e sua resposta são bem sucedidas, a resposta pode indicar falha — por exemplo, se a requisição tenta usar um tipo de requisição não definido ou o tratador joga um erro. Para dar esse suporte, ``` send ``` e ``` defineRequestType ``` seguem a convenção mencionada antes, onde o primeiro argumento é passado para as _callbacks_ é a razão da falha, se existir, e o segundo é o resultado de verdade.
+
+Isso pode ser traduzido em a resolução e rejeição da _promise_ em nosso embrulho.
+
+```
+class Timeout extends Error {}
+
+function request(nest, target, type, content) {
+  return new Promise((resolve, reject) => {
+    let done = false;
+    function attempt(n) {
+      nest.send(target, type, content, (failed, value) => {
+        done = true;
+        if (failed) reject(failed);
+        else resolve(value);
+      });
+      setTimeout(() => {
+        if (done) return;
+        else if (n < 3) attempt(n + 1);
+        else reject(new Timeout("Timed out"));
+      }, 250);
+    }
+    attempt(1);
+  });
+}
+
+```
+
+Já que _promises_ podem ser resolvidas (ou rejeitadas) apenas uma vez, isso irá funcionar. A primeira vez que _resolve_ ou _reject_ são chamados determina o resultado da _promise_, e próximas chamadas causadas por uma requisição retornando após a primeira são ignoradas.
+
+Para construir um _loop_ assíncrono, para múltiplas tentativas, nós precisamos utilizar uma função recursiva — um _loop_ convencional não permite que nós esperemos a respostas de uma ação assíncrona. A função que tenta a requisição faz uma única tentativa para enviar a requisição. Ela também estabelece um tempo de resposta (_timeout_), para caso não haja resposta depois de 250 milissegundos, ou ela tenta a próxima tentativa ou, se for a terceira tentativa, rejeita a _promise_ com uma nova instânica de _Timeout_ como o motivo.
+
+Fazendo novas tentativas a cada quarto de segundo e desistindo quando não há resposta depois de três quartos de segundo é definitivamente arbitrário. É até possível que, se uma requisição ocorresse mas a resposta de seus tratadores demorasse um pouco mais, a requisição seria devolvida várias vezes. Nós vamos escrever os nossos tratadores com esse problema em mente — mensagens duplicadas devem ser inofensivas.
+
+Em geral, não vamos construir uma rede robusta e de excelência hoje. Contudo está tudo bem — corvos não têm grandes expectativas quando se trata de computação.
+
+Para nos isolar das _callbacks_ completamente, nós vamos definir um embrulho para o ``` defineRequestType ``` que permite que o tratador retorne uma _promise_ ou valor puro e o ligue ele com uma _callback_.
+
+```js
+function requestType(name, handler) {
+  defineRequestType(name, (nest, content, source,
+                           callback) => {
+    try {
+      Promise.resolve(handler(nest, content, source))
+        .then(response => callback(null, response),
+              failure => callback(failure));
+    } catch (exception) {
+      callback(exception);
+    }
+  });
+}
+```
+
+``` Promise.resolved ``` é utilizado para converter o valor retornado pelo ``` handler ``` (tratador) para a _promise_ se ela não estiver pronta.
+
+Perceba que a chamada do ``` handler ``` está embrulhado em um bloco ``` try ``` para garantir que qualquer exceção levantada seja diretamente direcionada para a _callback_. Isso ilustra claramente a dificuldade de tratar de maneira correta os erros com _callbacks_ cruas — é fácil de esquecer direcionar exceções dessa maneira, e se você não fizer, as falhas não irão ser reportadas para a _callback_ correta. _Promises_  fazem isso automaticamente e portanto menos capazes de produzir erros.
+
+## Coleções de _Promises_
+
+Cada computador mantém uma lista de outras redes locais para transmissão em suas propriedades de vizinhança. Para verificar quais estão disponíveis, você pode escrever uma função que tenta enviar uma requisição  “_ping_”  (uma requisição que só pede uma resposta) para cada um deles e vê de quais tem-se uma resposta.
+
+Quando trabalhando com coleções de _promises_ executando ao mesmo tempo, a função _Promise.all_ pode ser útil. Ela retorna uma _promise_ que espera por todas as _promises_ da lista se resolverem e depois resolve os valores produzidos por essas _promises_ (na mesma ordem da lista original). Se qualquer uma dessa _promises_ é rejeitada, o resultado da ``` Promise.all ``` também é rejeitado.
+
+ ```
+requestType("ping", () => "pong");
+
+function availableNeighbors(nest) {
+  let requests = nest.neighbors.map(neighbor => {
+    return request(nest, neighbor, "ping")
+      .then(() => true, () => false);
+  });
+  return Promise.all(requests).then(result => {
+    return nest.neighbors.filter((_, i) => result[i]);
+  });
+}
+
+```
+
+Quando um vizinho não está disponível, nós não queremos que o conjunto de todas as  _promises_ fracasse, já que assim ainda não saberiamos de nada. Então, a função que é montada em cima do conjunto de vizinhos para os tornar requisições de _promises_ vínculadas ao uma tratador que faz requisições que fazem requisições bem sucedidas produzem um valor ``` true ``` e as rejeitadas produzem um valor ``` false ```.
+
+No tratador para as _promises_ combinadas, ``` filter ``` é utilizado para remover aqueles elementos do _array_ dos vizinhos correspondentes a um valor ``` false ```. Isso utiliza o fato de a função ``` filter ``` passar o _index_ como segundo argumento da função de filtragem (``` map ```, ``` some ```, e outros métodos de alta ordem similares dos _arrays_ fazem a mesma coisa).
+
+## Inundando a rede
+
+
+## Roteando Mensagens
+
+Cada nó dado quer conversar com apenas outro nó, _flooding_ não é uma abordagem eficiente. Especialmente quando a rede é grande, o que ia levar a muitos dados inúteis sendo transferidos.
+
+Uma alternativa a essa abordagem é organizar uma forma para que as mensagens pulem de nó em nó até que elas alcancem seu destino. A dificuldade é que isso requer conhecimento sobre o _layout_ (forma) da rede.
+
+

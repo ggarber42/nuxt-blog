@@ -288,11 +288,459 @@ No tratador para as _promises_ combinadas, ``` filter ``` é utilizado para remo
 
 ## Inundando a rede
 
+O fato de cada ninho pode apenas conversar com seus vizinhos inibe de maneira significativa a utilidade da rede.
+
+Para transmitir informação para toda a rede, uma solução é organizar um tipo de requisição que automaticamente é encaminhada para os vizinhos. Esses vizinhos então encaminham para outros vizinhos, até que a rede inteira tenha recebido a mensagem.
+
+```js
+import {everywhere} from "./crow-tech";
+
+everywhere(nest => {
+  nest.state.gossip = [];
+});
+
+function sendGossip(nest, message, exceptFor = null) {
+  nest.state.gossip.push(message);
+  for (let neighbor of nest.neighbors) {
+    if (neighbor == exceptFor) continue;
+    request(nest, neighbor, "gossip", message);
+  }
+}
+
+requestType("gossip", (nest, message, source) => {
+  if (nest.state.gossip.includes(message)) return;
+  console.log(`${nest.name} received gossip '${
+               message}' from ${source}`);
+  sendGossip(nest, message, source);
+});
+
+```
+
+Para evitar enviar a mesma mensagem pela rede para sempre, cada ninho possui um _array_ de _strings_ de fofocas que já foram enviadas. Para definir esse _array_, nós utilizamos a função ``` everywhere ```, que executa o código em cada ninho, para adicionar a propri
+
 
 ## Roteando Mensagens
 
 Cada nó dado quer conversar com apenas outro nó, _flooding_ não é uma abordagem eficiente. Especialmente quando a rede é grande, o que ia levar a muitos dados inúteis sendo transferidos.
 
-Uma alternativa a essa abordagem é organizar uma forma para que as mensagens pulem de nó em nó até que elas alcancem seu destino. A dificuldade é que isso requer conhecimento sobre o _layout_ (forma) da rede.
+Uma alternativa a essa abordagem é organizar uma forma para que as mensagens pulem de nó em nó até que elas alcancem seu destino. A dificuldade é que isso requer conhecimento sobre o _layout_ (forma) da rede. Para enviar uma requisição na direção de um ninho distante, é necessário saber qual ninho vizinho está mais perto do destino. Enviar ela numa direção errada não seria útil.
+
+Já que cada ninho conhece apenas seus vizinhos diretos, a informação não precisa ser da rota completa. Nós precisamos de alguma forma espalhar a informação sobre essas conexões para todos os ninhos, preferivelmente de uma forma que permita mudanças com o passar do tempo, quando ninhos forem abandonados ou novos construídos.
+
+Nós podemos utilizar a inundação novamente, mas ao invés de checar se uma dada mensagem já foi recebida, nós podemos agora checar se os novos vizinhos são os ninhos que procuramos.
+
+```js
+
+requestType("connections", (nest, {name, neighbors},
+                            source) => {
+  let connections = nest.state.connections;
+  if (JSON.stringify(connections.get(name)) ==
+      JSON.stringify(neighbors)) return;
+  connections.set(name, neighbors);
+  broadcastConnections(nest, name, source);
+});
+
+function broadcastConnections(nest, name, exceptFor = null) {
+  for (let neighbor of nest.neighbors) {
+    if (neighbor == exceptFor) continue;
+    request(nest, neighbor, "connections", {
+      name,
+      neighbors: nest.state.connections.get(name)
+    });
+  }
+}
+
+everywhere(nest => {
+  nest.state.connections = new Map();
+  nest.state.connections.set(nest.name, nest.neighbors);
+  broadcastConnections(nest, nest.name);
+});
 
 
+```
+
+A comparação utiliza ``` JSON.stringify ``` porque ==, em objetos ou _arrays_, irá retornar verdadeiro apenas quando os dois são exatamente o mesmo valor, o que não precisamos. Compar as _strings_ de JSON é um jeito cru, mas efetivo de comparar seu conteúdo.
+
+Os nós imediatamente começam a transmitir a suas conexões, o que deveria, a não ser que alguns ninhos estejam completamente fora de alcance, rapidamente dá cada ninho um mapa do diagrama de rede.
+
+Algo que é possível fazer com diagramas é encontrar as rotas, como vimos no capítuolo 7[]. Se nós tivermos a rota para o destino da mensagem, nós sabemos para qual direção enviar.
+
+A função ``` findRoute ```, que lembra bastante a ``` findRoute ``` do Capítulo 7[], procura uma forma de alcançar um nó da rede. Mas, ao invés de retornar toda a rota, retorna apenas o próximo passo. Que o próximo ninho irá, usando a informação atual sobre a rede, decidir onde ele irá enviar a mensagem.
+
+```js
+
+function findRoute(from, to, connections) {
+  let work = [{at: from, via: null}];
+  for (let i = 0; i < work.length; i++) {
+    let {at, via} = work[i];
+    for (let next of connections.get(at) || []) {
+      if (next == to) return via;
+      if (!work.some(w => w.at == next)) {
+        work.push({at: next, via: via || next});
+      }
+    }
+  }
+  return null;
+}
+
+
+```
+
+Agora nós podemos construir uma função que envia mensagem de distâncias longas. Se a mensagem for endereçada a um vizinho próximo, ela retorna como de costume. Se não, ela é empacotada em um objeto e enviado a um vizinho que está mais próximo do alvo, utilizando o tipo de requisição ``` “route” ```, que irá fazer com que os vizinhos repitam o mesmo comportamento.
+
+```js
+
+function routeRequest(nest, target, type, content) {
+  if (nest.neighbors.includes(target)) {
+    return request(nest, target, type, content);
+  } else {
+    let via = findRoute(nest.name, target,
+                        nest.state.connections);
+    if (!via) throw new Error(`No route to ${target}`);
+    return request(nest, via, "route",
+                   {target, type, content});
+  }
+}
+
+requestType("route", (nest, {target, type, content}) => {
+  return routeRequest(nest, target, type, content);
+});
+
+
+```
+
+Nós podemos agora enviar mensagens para o ninho próximo da torre da igreja, que está há quatro pulos da rede removida.
+
+```js
+
+routeRequest(bigOak, "Church Tower", "note",
+             "Incoming jackdaws!");
+
+```
+
+Nós construímos várias camadas de funcionalidade em cima de um sistema de comunicação primitivo para fazer seu uso conveniente. É um bom (apesar de simplificado) modelo de como uma rede de computadores funciona.
+Uma distinta propriedade de como as redes de computador é que elas não são confiáveis — abstrações construídas sobre elas podem ajudar, mas você não pode abstrair uma falha de rede. Então, programação de rede é tipicamente antecipar e lidar com suas falhas.
+
+## Funções Assíncronas
+
+Para armazenar informações importantes, os corvos são conhecidos por duplicar elas através dos ninhos. Deste modo, se um falcão destruir o ninho, a informação não é perdida.
+
+Para reter uma parte da informação que não possui seu próprio bulbo de armazenamento, um ninho computador pode consultar aleatoriamente outros ninhos da rede, até encontrar um que o possua.
+
+```jjs
+
+requestType("storage", (nest, name) => storage(nest, name));
+
+function findInStorage(nest, name) {
+  return storage(nest, name).then(found => {
+    if (found != null) return found;
+    else return findInRemoteStorage(nest, name);
+  });
+}
+
+function network(nest) {
+  return Array.from(nest.state.connections.keys());
+}
+
+function findInRemoteStorage(nest, name) {
+  let sources = network(nest).filter(n => n != nest.name);
+  function next() {
+    if (sources.length == 0) {
+      return Promise.reject(new Error("Not found"));
+    } else {
+      let source = sources[Math.floor(Math.random() *
+                                      sources.length)];
+      sources = sources.filter(n => n != source);
+      return routeRequest(nest, source, "storage", name)
+        .then(value => value != null ? value : next(),
+              next);
+    }
+  }
+  return next();
+}
+
+
+```
+
+Porque ``` connections ``` é um ``` Map ```, ``` Object.keys ``` não funciona nele. Se possui um método ``` keys ```, mas retorna um iterador  ao invés de um _array). O iterador (ou o valor iterável) pode ser convertido em um _array_ com a função ``` Array.from ```.
+
+Até para _promises_ esse código é esquisito. Múltiplas ações assíncronos estão encadeadas de manerias não óbvias. Nós precisamos novamente de uma função recursiva (``` next ```) para modelar o _looping_ (estrutura de repetição) através dos ninhos.
+
+E o que o código faz na verdade é completamente linear — ele sempre espera a função anterior ser completada antes de começar a próxima. Em um modelo de programação síncrona, é simples de expressar.
+
+A boa notícia é que o JavaScript permite que você escreva código pseudo-síncrono para descrever computação assíncrona. A função ``` async ``` é uma função que implicitamente retorna uma _promise_ que pode, dentro de sí, ``` await ``` outras _promises_ que parecem síncronas.
+
+Nós podemos reescrever ``` findInStorage ``` da seguinte forma:
+
+```js
+
+async function findInStorage(nest, name) {
+  let local = await storage(nest, name);
+  if (local != null) return local;
+
+  let sources = network(nest).filter(n => n != nest.name);
+  while (sources.length > 0) {
+    let source = sources[Math.floor(Math.random() *
+                                    sources.length)];
+    sources = sources.filter(n => n != source);
+    try {
+      let found = await routeRequest(nest, source, "storage",
+                                     name);
+      if (found != null) return found;
+    } catch (_) {}
+  }
+  throw new Error("Not found");
+}
+
+
+```
+
+Uma função ``` async ``` é marcada pela palavra ``` async ``` antes da palavra-chave ``` function ```. Métodos também podem ser transformados ao escrever ``` async ``` antes de seus nomes. Quando tal função ou método é chamado, ele retorna uma _promise_. Assim que o corpo retorna algo, a _promise_ é resolvida. Se ele joga uma exceção, a _promise_ é rejeitada.
+
+```js
+
+findInStorage(bigOak, "events on 2017-12-21")
+  .then(console.log);
+
+```
+
+Dentro de uma função ``` async ```, a palavra ``` await ``` pode ser posta na frente de uma expressão para esperar a _promise_ ser resolvida e apenas aí continuar a execução da função.
+
+Tal função não mais, como numa função Javascript padrão, roda do começo ao fim de uma vez. Ao invés disso, ela fica congelada no ponto que possui o ``` await ``` e pode ser retomada depois.
+
+Para código assíncronos não triviais, essa notação é geralmente mais conveniente que utilizar _promises_ diretamente. Mesmo que você precise fazer algo que não se encaixe no modelo síncrono, como múltiplas ações ao mesmo tempo, é mais simples combinar o termo ``` await ``` ao invés de utilizar _promises_ diretamente.
+
+## Generatos
+
+Essa habilidade de pausar as funções e depois as retomar não é exclusiva de funções ``` async ```. No JavaScript temos também um recurso chamado _generator functions_ (funções geradoras). Elas são similares, mas sem as _promises_.
+
+Quando você define uma função com ``` function* ``` (colocando um asterisco depois da palavra ``` function ```), ela se torna um _generator_. Quando você chama um _generator_, ele retorna um iterador, o qual já vimos no Capítulo 6.
+
+```js
+
+function* powers(n) {
+  for (let current = n;; current *= n) {
+    yield current;
+  }
+}
+
+for (let power of powers(3)) {
+  if (power > 50) break;
+  console.log(power);
+}
+// → 3
+// → 9
+// → 27
+
+
+```
+Inicialmente, quando você chama ``` powers ```, a função é congelada quando começa. Cada vez que você chama  ``` next ```  no iterador, a função roda até que chega na expressão ``` yields ```, que a pausa e faz com que o valor gerado seja o próximo valor produzido pelo iterador. Quando a função retorna ( a do exemplo nunca o faz), o iterador está terminado.
+
+Escrever iteradores é geralmente muito mais simples quando se utiliza funções geradoras. O iterador para a classe ``` Group ``` (do exercício do capítulo 6) pode ser escrita com o gerador:
+
+```js
+
+Group.prototype[Symbol.iterator] = function*() {
+  for (let i = 0; i < this.members.length; i++) {
+    yield this.members[i];
+  }
+};
+
+
+```
+
+Não há mais necessidade de criar um objeto para manter o estado de iteração — geradores automaticamente salvam o seu estado local toda a vez que eles geram.
+
+Tal expressão ``` yield ``` pode ocorrer apenas diretamente no próprio gerador da função e não numa função interna definida dentro dele. O estado que o gerador salva ao gerar, é apenas no ambiente local e na posição em que está sendo gerado.
+
+Uma função assíncrona é um tipo especial de _generator_. Ela produz uma _promise_ quando é chamada, a qual é resolvida e retorna (termina) e quando é rejeitada ela joga uma exceção. Sempre que ela gera (_awaits_) a _promise_, o resultado da _promise_ (valor ou exceção jogada) é o resultado da expressão _await_.
+
+## O evento _loop_
+
+Programas assíncronos são executados parte por parte. Cada parte pode começar com algumas ações e agendar para que o código seja executado quando a ação terminar ou falhar. Entre essas peças, o programa está ocioso, esperando pela próxima ação.
+
+Então, _callbacks_ não são diretamente chamados pelo código que os agendou. Se eu chamar ``` setTimeout ``` de dentro da função, aquela função irá ter retornado na hora em que a função _callback_ for chamada. E quando o _callback_ retornar, o controle não retorna para a função que o agendou.
+
+Comportamento assíncrono acontece na sua _stack_ de chamada de função vazia. Esta é uma das razões pelas quais, sem _promises_, controlar as exceções em um código assíncrono é difícil. Já que cada _callback_ começa com um _stack_ praticamente vazio, seus ``` catch ``` _handlers_ não vão estar em sua _stack_ quando jogarem uma exceção.
+
+```js
+
+try {
+  setTimeout(() => {
+    throw new Error("Woosh");
+  }, 20);
+} catch (_) {
+  // This will not run
+  console.log("Caught!");
+}
+
+
+```
+
+Não importa o quão próximos os eventos — como os _timeouts_ ou requisições — ocorrem, um ambiente JavaScript sempre vai rodar apenas um programa de cada vez. Você pode pensar nisso como se ele estivesse rodando um grande _loop_ ao redor do seu programa, chamado de _loop_ de evento. Quando não há nada a ser feito, o _loop_ é parado. Mas, quando os eventos ocorrem, eles são adicionados a uma fila, e seu código é executado um depois do outro. Porque duas coisas não rodam ao mesmo tempo, código que roda devagar pode atrasar o tratamento de outros eventos.
+
+Esse exemplo coloca um _timeout_ mas depois espera até depois do ponto no tempo pretendido, fazendo com que o _timeout_ fique tarde.
+
+
+```js
+
+let start = Date.now();
+setTimeout(() => {
+  console.log("Timeout ran at", Date.now() - start);
+}, 20);
+while (Date.now() < start + 50) {}
+console.log("Wasted time until", Date.now() - start);
+// → Wasted time until 50
+// → Timeout ran at 55
+
+
+```
+
+_Promises_ sempre resolvem ou rejeitam como um novo evento. Mesmo que uma _promise_ esteja já resolvida, esperar for ela vai resultar no seu _callback_ rodar depois que o _script_ atual, ao invés do jeito correto.
+
+```js
+
+Promise.resolve("Done").then(console.log);
+console.log("Me first!");
+// → Me first!
+// → Done
+
+```
+
+Nos próximos capítulos vamos ver vários tipos de outros eventos que rodam no evento _loop_.
+
+## _Bugs_ Assíncronos
+
+Quando seus programas rodam de forma síncrona, de uma vez só, não há mudanças no estado acontecendo, a não ser aquelas que o próprio programa faz. Para programa assíncronos isso é diferente — podem haver lacunas em suas execuções na qual outro código pode rodar.
+
+Vamos ver um exemplo. Um dos _hobbies_ dos corvos é contar o número de franguinhos que chocam pela vila todo ano. Ninhos armazenam essa contagem em seus bulbos de armazenamento. O código a seguir tenta enumerar as contagens de todos os ninhos ao longo de um dado ano.
+
+```js
+
+function anyStorage(nest, source, name) {
+  if (source == nest.name) return storage(nest, name);
+  else return routeRequest(nest, source, "storage", name);
+}
+
+async function chicks(nest, year) {
+  let list = "";
+  await Promise.all(network(nest).map(async name => {
+    list += `${name}: ${
+      await anyStorage(nest, name, `chicks in ${year}`)
+    }\n`;
+  }));
+  return list;
+}
+
+
+``` 
+
+A parte ``` async name =>```  mostra que funções em flecha também podem se tornar ``` async ``` ao colocar a palavra ``` async ``` na frente delas.
+
+O código não parece imediatamente suspeito...ele mapeia a função flecha ``` async ``` através de um conjunto de ninhos, criando um _array_ de _promises_ e utiliza o ``` Promise.all ``` para esperar por todas aquelas antes de retornar a lista que eles contruíram.
+
+Mas isso está seriamente errado. Ele sempre irá retornar apenas uma linha de saída, listando o ninho mais devagar a responder.
+
+```js
+
+chicks(bigOak, 2017).then(console.log);
+
+```
+
+Você sabe dizer porquê?
+
+O problema ocorre no operador +=, que pega o valor atual de ``` list ``` na hora em que a declaração começa a ser executada e então, quando o ``` await ``` termina, faz com que o valor de ``` list ``` seja o aquele valor mais a _string_ adicionada.
+
+Mas entre o tempo em que a declaração começa a ser executada e o hora em que ela termina há uma lacuna assíncrona. A expressão ``` map ``` roda antes que qualquer coisa seja adicionada a lista, então o operador += começa em uma _string_ vazia e termina, quando a computação de estocagem acaba, fazendo _list_ uma lista de uma linha — o resultado de adicionar sua linha a uma _string_ vazia.
+
+Isso poderia ser facilmente evitada por retornar as linhas que foram mapeadas pelas _promises_ e chamando ``` join ``` no resultado de ``` Promise.all ```, ao invés de construir uma lista encadeando uma ligação. Como de costume, computar novos valores tende a menos erros que mudar os existentes.
+
+```js
+
+async function chicks(nest, year) {
+  let lines = network(nest).map(async name => {
+    return name + ": " +
+      await anyStorage(nest, name, `chicks in ${year}`);
+  });
+  return (await Promise.all(lines)).join("\n");
+}
+
+
+```
+Erros assim são fáceis de cometer, especialmente quando utilizamos ``` await ```, e você deve ficar atento de onde essas lacunas podem ocorrer. Uma vantagem a assincronicidade explícita do JavaScript (através de _callbacks_, _promises_ ou ``` await ```) é que encontrar essas lacunas é relativamente fácil.
+
+## Resumo
+
+Programação assíncrona torna possível expressar esperas por ações que rodam por muito tempo sem congelar o programa durante essas ações. Ambientes JavaScript tipicamente implementam esse estilo de programação uitilizando _callbacks_, funções que são chamadas quando certas ações são completadas. Um evento _loop_ agenda tais _callbacks_ para serem chamadas quando apropriado, uma depois da outra, para que na execução não ocorra sobreposições.
+
+Programando assíncronamente se torna mais fácil com _promises_, objetos que representam ações que pode ser completas no futuro e funções ``` async ```, que permitem que você escreva um progama assíncrono como se fosse síncrono.
+
+## Exercícios
+
+### Rastreando o bisturi
+
+A vila de corvos tem um velho bisturi que eles de vez em quando usam em missões especiais — por exemplo, para cortar telas de portas ou mochilas. Para poder rastreá-lo rapidamente, toda vez que o bisturi é transportado para outro ninho, um registro é adicionado na memória de ambos os ninhos, o que tinha e o que pegou, sob o nome de “``` scapel ```, com sua nova localização como valor.
+
+Isso significa que para achar o bisturi basta seguir a trilha de registros, até achar o ninho em que o ponto é o próprio ninho.
+
+Escreva uma função assíncrona (``` async ```) ``` locateScalpel ``` que começando no ninho em que é executada. Você pode usar a função ``` anyStorage ``` definida anteriormente par acessar a memória de ninhos arbitrários. O bisturi já foi transportado tanto que você pode assumir que todo ninho tem o registro “_``` scalpel ```_ no seu banco de dados.
+
+A seguir, escreva a mesma função sem utilizar ``` async ``` e ``` await ```.
+
+As requisições fracassadas são mostradas propriamente como rejeições das _promises_ em ambas as versões? Como?
+
+```js
+
+async function locateScalpel(nest) {
+  // Your code here.
+}
+
+function locateScalpel2(nest) {
+  // Your code here.
+}
+
+locateScalpel(bigOak).then(console.log);
+// → Butcher Shop
+
+
+```
+
+### Construindo _Promise.all_
+Dado um _array_ de _promises_, ``` Promise.all ``` retorna uma _promise_ que espera que todas as  _promises_ do _array_ terminarem. Se é bem sucedida, gera um _array_ dos valores dos resultados. Se uma  _promise_  no _array_ falha, a _promise_ retornada por ``` all ``` fracassa também, com a falha sendo a da  _promise_ que falhou.
+
+Implementando algo como isso você mesmo, como uma função comum chamada ``` Promise_all ```.
+
+Lembrando que depois da  _promise_ ter sucesso ou falhar, ela não pode ter sucesso ou fracassar novamente, em próximas chamadas para funções que as resolvem são ignoradas. Isso pode simplificar a forma como você trata a falha da sua  _promise_.
+
+```js
+function Promise_all(promises) {
+  return new Promise((resolve, reject) => {
+    // Your code here.
+  });
+}
+
+// Test code.
+Promise_all([]).then(array => {
+  console.log("This should be []:", array);
+});
+function soon(val) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(val), Math.random() * 500);
+  });
+}
+Promise_all([soon(1), soon(2), soon(3)]).then(array => {
+  console.log("This should be [1, 2, 3]:", array);
+});
+Promise_all([soon(1), Promise.reject("X"), soon(3)])
+  .then(array => {
+    console.log("We should not get here");
+  })
+  .catch(error => {
+    if (error != "X") {
+      console.log("Unexpected failure:", error);
+    }
+  });
+
+
+
+`` 

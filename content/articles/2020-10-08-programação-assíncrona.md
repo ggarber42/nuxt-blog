@@ -705,6 +705,18 @@ locateScalpel(bigOak).then(console.log);
 
 ```
 
+*Dica:*
+
+Isso pode ser feito em um _loop_ único que busca pelos ninhos, movendo adiante para o próximo quando ele encontra o valor que não equivale ao nome do ninho atual e retorna o nome quando encontra o valor. Numa função ``` async ```, um ``` for ``` ou ``` while ``` _loop_ pode ser utilizado.
+
+Para fazer o mesmo numa função normal, você vai ter que construir o _loop_ utilizando uma funçãor recursiva. A maneira mais fácil de fazer isso é ter a função retornando uma  _promise_ chamando ``` then ``` na _promise_ que mantém o valor armazendo. Dependendo se o valor equivale ao nome do próximo ninho, o tratador retorna o valor ou uma próxima _promise_ chamando o _loop_ novamente.
+
+Não se esqueça de começar o _loop_ chamando uma função recursiva uma vez na função principal.
+
+Na função ``` async ```, _promises_ rejeitadas são covertidas por exeções pelo ``` await ```. Quando a função ``` async ``` joga uma exeção, a _promise_ é rejeitada. Assim funciona.
+
+Se você implementar uma função comum como mostrado antes, o jeito que ``` then ``` funciona também automaticamente causa uma falha, o tratador passado no ``` then ``` não é chamado, e o retorna da _promise_ é rejeitado pela mesma razão.
+
 ### Construindo _Promise.all_
 Dado um _array_ de _promises_, ``` Promise.all ``` retorna uma _promise_ que espera que todas as  _promises_ do _array_ terminarem. Se é bem sucedida, gera um _array_ dos valores dos resultados. Se uma  _promise_  no _array_ falha, a _promise_ retornada por ``` all ``` fracassa também, com a falha sendo a da  _promise_ que falhou.
 
@@ -743,4 +755,12 @@ Promise_all([soon(1), Promise.reject("X"), soon(3)])
 
 
 
-`` 
+```
+
+*Dica:*
+
+A função para o construtor da  ``` Promise ``` vai ter que chamar o ``` then ``` de cada _promise_ no dado _array_. Quando uma for bem sucedida, duas coisas precisam acontecer. O valor resultando precisa ser armazenado na posição correta no _array_ resultante, e precisa verificar se esse é o último valor pendente da _promise_ e terminar a própria _promise_ se for.
+
+A última pode ser feita com um contador  que é inicializado com o comprimento do _array_ de entrada e do qual nós subtraímos 1 cada vez que a _promise_ é bem sucedida. Quando atinge 0, nós terminamos. Garante que você vai levar em conta a situação em que a entrada do _array_ for vazio (assim nenhuma _promise_ vai ser resolvida).
+
+Tratar falhas requer raciocínio mas se torna extremamente simples. Apenas passe a função ``` reject ``` _wrapping_ a _promise_ para cada uma das _promises_ no _array_ como um tratador ``` catch ``` ou como um segundo argumento para o ``` then ``` para que a falha de uma acione a rejeição de toda a _wrapper_ _promise_.

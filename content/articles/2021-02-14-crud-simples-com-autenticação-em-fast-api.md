@@ -27,5 +27,30 @@ Depois, criamos o _virtual environment_ (ambiente virtual) para instalar os mód
 ```bash
 $ virtualenv venv
 $ source venv/bin/activate
-$ pip install fastapi==0.61.1 uvicorn==0.11.8
+$ pip install fastapi uvicorn
+```
+
+Agora criamos nosso primeiro arquivo
+
+```bash
+$ touch main.py
+```
+
+
+```python
+from typing import Optional
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Optional[str] = None):
+    return {"item_id": item_id, "q": q}
 ```

@@ -11,6 +11,7 @@ Buscando alguns tutoriais de referência:
 > https://fastapi.tiangolo.com/ 
 > https://testdriven.io/blog/fastapi-react/
 > https://developer.mongodb.com/how-to/FARM-Stack-FastAPI-React-MongoDB/
+> https://fastapi.tiangolo.com/tutorial/
 >
 
 ## Criando pastas e instalando módulos

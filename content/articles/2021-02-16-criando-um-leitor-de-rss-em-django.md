@@ -42,5 +42,24 @@ E agora criamos o app em sí
 E podemos rodar o app com
 
 ```bash
+~ $ python manage.py migrate
 ~ $ python manage.py runserver
+```
+(a gente faz a migração para ele parar de reclamar)
+
+E agora, dentro das configurações do Django a gente precisa registrar um app:
+
+~server/rss_project/settings.py 
+```python
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rss.apps.RssConfig' #mine
+]
 ```

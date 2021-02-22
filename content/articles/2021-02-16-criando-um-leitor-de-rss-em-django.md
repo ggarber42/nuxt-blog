@@ -5,15 +5,11 @@ description: seguindo tutorial
 ---
 ### Referências
 
->
 > https://www.youtube.com/watch?v=0FTaWat_VsM
->
 
 ### Primeiros comandos
 
 ```bash
-~ $ mkdir backend
-~ $ rm -rf backend/
 ~ $ mkdir server
 ~ $ mkdir client
 ~ $ cd server/
@@ -38,18 +34,10 @@ E agora criamos o app em sí
 ```bash
 ~ $ python manage.py startapp rss
 ```
-
-E podemos rodar o app com
-
-```bash
-~ $ python manage.py migrate
-~ $ python manage.py runserver
-```
-(a gente faz a migração para ele parar de reclamar)
-
 E agora, dentro das configurações do Django a gente precisa registrar um app:
 
 ~server/rss_project/settings.py 
+
 ```python
 # Application definition
 
@@ -63,3 +51,13 @@ INSTALLED_APPS = [
     'rss.apps.RssConfig' #mine
 ]
 ```
+
+E podemos rodar o app com
+
+```bash
+~ $ python manage.py migrate
+~ $ python manage.py runserver
+```
+
+(a gente faz a migração para ele parar de reclamar)
+

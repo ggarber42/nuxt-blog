@@ -61,7 +61,7 @@ E podemos rodar o app com
 
 (a gente faz a migração para ele parar de reclamar)
 
-#### Criando um super usuario
+#### Criando um super usuário
 
 ```bash
 python manage.py createsuper
@@ -70,4 +70,29 @@ wsvEmail:
 Password:
 Password (again):
 Superuser created successfully
+```
+#### Tornando esse app uma REST API
+
+```bash
+pip install feedparser feedparser djangorestframework
+```
+Agora temos todos os pacotes externos ao django, para criar um leitor de feed rss.
+
+Atualizamos novamente nosso settings.py:
+
+```python
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # externo
+    'rest_framework', #novo
+    #local
+    'rss.apps.RssConfig'
+]
 ```

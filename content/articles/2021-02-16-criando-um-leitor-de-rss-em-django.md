@@ -17,7 +17,7 @@ description: seguindo tutorial
 ~ $ source venv/bin/activate
 ```
 
-### Instalação
+### Instalação e configurações
 
 ```bash
 ~ $ pip install django
@@ -61,3 +61,13 @@ E podemos rodar o app com
 
 (a gente faz a migração para ele parar de reclamar)
 
+#### Criando um super usuario
+
+```bash
+python manage.py createsuper
+userUsername (leave blank to use 'wsv'): 
+wsvEmail:
+Password:
+Password (again):
+Superuser created successfully
+```

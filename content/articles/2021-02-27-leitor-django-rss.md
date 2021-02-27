@@ -9,27 +9,27 @@ https://www.youtube.com/watch?v=0FTaWat_VsM
 
 #### Montando o ambiente
 
-´´´bash
+```bash
 mkdir django-rss-reader
 cd django-rss-reader/
 source venv/bin/activate
-´´´
+```
 
 ### Aplicação Django
 
 #### Instalando o django e os primeiros comandos
 
-´´´bash
+```bash
 pip install django
 django-admin startproject rssreader
 django-admin startproject rss_project .
 python manage.py startapp rss
-´´´
+```
 #### Configurando e rodando a aplicação
 
 Primeiro precisamos incluir o app na configuração geral
 
-´´´python
+```python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,12 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rss.apps.RssConfig', #local
 ]
-´´´
+```
 
 Depois fazemos a primeira migração e finalmente podemos rodar o app.
 
-´´´bash
+```bash
 python manage.py migrate
 python manage.py runserver
-´´´
+```
 

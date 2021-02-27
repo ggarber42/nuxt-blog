@@ -67,7 +67,7 @@ npm i prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
 #### Editando/ Criando arquivos
 
 
-```console[.eslintrec.json]
+```json[.eslintrec.json]
 {
     "env": {
         "browser": true,
@@ -103,7 +103,7 @@ npm i prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
 
 ```
 
-```console[.prettierrc]
+```json[.prettierrc]
 {
     "singleQuote": true,
     "trailingComma": "all",

@@ -20,7 +20,7 @@ source venv/bin/activate
 #### Instalando o django e os primeiros comandos
 
 ```bash
-pip install django
+pip install django djangorestframework requets feedparser
 django-admin startproject rssreader
 django-admin startproject rss_project .
 python manage.py startapp rss
@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',```
+    'django.contrib.staticfiles',
+    'rest_framework', #3rd
     'rss.apps.RssConfig', #local
 ]
+
 ````
 
 Depois fazemos a primeira migração e finalmente podemos rodar o app.

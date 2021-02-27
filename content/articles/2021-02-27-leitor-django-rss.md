@@ -30,17 +30,17 @@ python manage.py startapp rss
 
 Primeiro precisamos incluir o app na configuração geral
 
-```python
+````python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',```
     'rss.apps.RssConfig', #local
 ]
-```
+````
 
 Depois fazemos a primeira migração e finalmente podemos rodar o app.
 
@@ -50,3 +50,11 @@ python manage.py runserver
 ```
 
 ![](/img/screenshot-from-2021-02-26-23-57-21.png)
+
+#### Criando um superusuário no Django admin
+
+```bash
+python manage.py createsuperuser
+```
+
+![](/img/screenshot-from-2021-02-27-00-03-30.png)

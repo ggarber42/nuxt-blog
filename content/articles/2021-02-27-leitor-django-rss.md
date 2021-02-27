@@ -13,6 +13,26 @@ https://www.youtube.com/watch?v=0FTaWat_VsM
 mkdir django-rss-reader
 cd django-rss-reader/
 source venv/bin/activate
-pip install django
 ´´´
 
+### Aplicação Django
+
+#### Instalando o django e os primeiros comandos
+
+´´´bash
+pip install django
+django-admin startproject rssreader
+django-admin startproject rss_project .
+python manage.py startapp rss
+´´´
+´´´python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rss.app.RssConfig', #local
+]
+´´´

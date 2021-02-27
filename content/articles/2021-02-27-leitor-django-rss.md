@@ -58,3 +58,50 @@ python manage.py createsuperuser
 ```
 
 ![](/img/screenshot-from-2021-02-27-00-03-30.png)
+
+#### Criando rotas e views
+
+Primeiro criamos a view em  ~rss/views.py
+
+```python
+from django.shortcuts import render
+from django.http import HttpResponse
+
+# Create your views here.
+
+def index(request):
+   return HttpResponse("RSS Reader Index View")
+```
+
+Agora criamos o arquivo em urls dentro do projeto
+
+~rss/urls.py
+
+```python
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+   path('', views.index, name='index')
+```
+
+e depois a incluímos no app
+
+~rss_project/urls.py
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('rss/', include('rss.urls')),
+]
+```
+
+Agora podemos testar a view em /rss
+
+
+
+![](/img/screenshot-from-2021-02-27-00-19-02.png)

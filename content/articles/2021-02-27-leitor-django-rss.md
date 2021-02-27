@@ -104,6 +104,25 @@ urlpatterns = [
 
 Agora podemos testar a view em /rss
 
-
-
 ![](/img/screenshot-from-2021-02-27-00-19-02.png)
+
+### Templates em Django
+
+Para criar um template em Django a gente precisa criar uma estrutura dentro do app "imitando" a original.
+
+```bash
+rss
+
+├── templates
+│   └── rss
+│       ├── base.html
+│       └── reader.html
+```
+
+O Django utiliza uma linguagem de template dentro do HTML para lidar com os dados dinâmicos.
+
+O base.html vai ser o template pai a partir do qual os outros extendem
+
+```HTML
+
+```

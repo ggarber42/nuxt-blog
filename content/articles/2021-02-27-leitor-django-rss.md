@@ -123,6 +123,33 @@ O Django utiliza uma linguagem de template dentro do HTML para lidar com os dado
 
 O base.html vai ser o template pai a partir do qual os outros extendem
 
+base.html`
 ```HTML
-
+<!DOCTYPE html>
+<head>
+   <title>Django RSS Reader</title>
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>
 ```
+
+E agora criamos outros templates que vão extender esse:
+
+reader.html`
+```HTML
+{% extends 'rss/base.html' %}
+
+{% block body %}
+<p>Greetings from reader.html!</p>
+{% endblock %}
+```
+
+E por fim vamos ligar ele na nossa view
+
+```python
+def index(request):
+    return render(request,'rss/reader.html')
+```
+

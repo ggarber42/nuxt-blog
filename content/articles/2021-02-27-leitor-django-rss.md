@@ -30,7 +30,7 @@ python manage.py startapp rss
 
 Primeiro precisamos incluir o app na configuração geral
 
-````python
+```python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'rest_framework', #3rd
     'rss.apps.RssConfig', #local
 ]
-
-````
+```
 
 Depois fazemos a primeira migração e finalmente podemos rodar o app.
 
@@ -124,6 +123,7 @@ O Django utiliza uma linguagem de template dentro do HTML para lidar com os dado
 O base.html vai ser o template pai a partir do qual os outros extendem
 
 base.html`
+
 ```HTML
 <!DOCTYPE html>
 <head>
@@ -138,6 +138,7 @@ base.html`
 E agora criamos outros templates que vão extender esse:
 
 reader.html`
+
 ```HTML
 {% extends 'rss/base.html' %}
 
@@ -153,3 +154,4 @@ def index(request):
     return render(request,'rss/reader.html')
 ```
 
+![](/img/screenshot-from-2021-02-27-00-52-52.png)

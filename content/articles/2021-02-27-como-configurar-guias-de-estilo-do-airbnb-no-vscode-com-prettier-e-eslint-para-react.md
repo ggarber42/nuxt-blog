@@ -20,8 +20,23 @@ npx create-react-app .
 
 Aqui vamos **editar** o package.json para tirar o eslint padrão
 
-```console[terminal]
-
+```json[package.json]
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+ // Apagar abaixo
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+ // Apagar acima
+  "browserslist": {
+    "production": [
 ```
 
 ##### Instalando dependências
@@ -96,3 +111,39 @@ npm i prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
     "jsxSingleQuote": true
 }
 ```
+
+```console[.editorconfig]
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = false
+insert_final_newline = false
+```
+
+```json[settings.json]
+{
+    .....
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "eslint.validate": ["javascript"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+}
+```
+
+##### Comandos
+
+Ctrl + S -> arruma erros pelo eslint
+shift + alt + f -> formata arquivo

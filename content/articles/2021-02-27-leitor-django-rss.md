@@ -25,6 +25,10 @@ django-admin startproject rssreader
 django-admin startproject rss_project .
 python manage.py startapp rss
 ´´´
+#### Configurando e rodando a aplicação
+
+Primeiro precisamos incluir o app na configuração geral
+
 ´´´python
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,6 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rss.app.RssConfig', #local
+    'rss.apps.RssConfig', #local
 ]
 ´´´
+
+Depois fazemos a primeira migração e finalmente podemos rodar o app.
+
+´´´bash
+python manage.py migrate
+python manage.py runserver
+´´´
+

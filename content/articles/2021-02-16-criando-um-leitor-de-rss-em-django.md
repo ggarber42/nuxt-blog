@@ -1,5 +1,5 @@
 ---
-title: Criando um leitor de RSS em Django
+title: Criando um leitor de RSS com Django API e React
 date: 2021-02-16T02:09:15.454Z
 description: seguindo tutorial
 ---

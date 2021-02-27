@@ -25,6 +25,7 @@ django-admin startproject rssreader
 django-admin startproject rss_project .
 python manage.py startapp rss
 ```
+
 #### Configurando e rodando a aplicação
 
 Primeiro precisamos incluir o app na configuração geral
@@ -48,3 +49,4 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+![](/img/screenshot-from-2021-02-26-23-57-21.png)

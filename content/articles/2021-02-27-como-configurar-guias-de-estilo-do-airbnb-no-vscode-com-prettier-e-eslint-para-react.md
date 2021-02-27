@@ -6,6 +6,10 @@ description: como configurar
 ---
 ### Guias de estilo
 
+#### VsCode
+
+Primeiro preciamos adicionar as extensões do Eslint, Prettier e EditorConfig ao VsCode.
+
 ##### Criano uma aplicação react
 
 ```console[terminal]
@@ -14,7 +18,15 @@ cd my-app
 npx create-react-app .
 ```
 
-##### Elisnt
+Aqui vamos **editar** o package.json para tirar o eslint padrão
+
+```console[terminal]
+
+```
+
+##### Instalando dependências
+
+##### Eslint
 
 Primeiro a gente instala o eslint. O "-D" mostra que é uma dependência dev
 
@@ -30,21 +42,57 @@ npx eslint --init
 ✔ Which style guide do you want to follow? · airbnb
 ✔ What format do you want your config file to be in? · JSON
 ```
-E agora roda o init para configurar o arquivo .eslintrc
+
+##### Prettier
 
 ```console[terminal]
-yarn run eslint --init
-yarn run v1.22.5
-✔ How would you like to use ESLint? · problems
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · react
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · browser
-✔ What format do you want your config file to be in? · JSON
-The config that you've selected requires the following dependencies:
+npm i prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
+```
 
-eslint-plugin-react@latest
-✔ Would you like to install them now with npm? · No / Yes
-Successfully created .eslintrc.json file in /home/ggarber/hello-world/configure-linting
-Done in 33.12s.
+#### Editando/ Criando arquivos
+
+
+```console[.eslintrec.json]
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "prettier"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+    "rules": {
+      "no-unused-vars": ["warn"],
+        "react/jsx-filename-extension": [
+            "error",
+            {
+              "extensions": [".js", ".jsx"]
+            }
+          ]
+    }
+}
+
+```
+
+```console[.prettierrc]
+{
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "jsxSingleQuote": true
+}
 ```

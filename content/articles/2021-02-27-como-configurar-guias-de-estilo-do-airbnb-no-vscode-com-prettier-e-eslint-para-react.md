@@ -18,35 +18,12 @@ cd my-app
 npx create-react-app .
 ```
 
-Aqui vamos **editar** o package.json para tirar o eslint padrão
-
-```json[package.json]
-"scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
- // Apagar abaixo
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
- // Apagar acima
-  "browserslist": {
-    "production": [
-```
-
 ##### Instalando dependências
-
-##### Eslint
 
 Primeiro a gente instala o eslint. O "-D" mostra que é uma dependência dev
 
 ```console[terminal]
-npm i eslint -D
+yarn add -D eslint
 npx eslint --init
 ✔ How would you like to use ESLint? · style
 ✔ What type of modules does your project use? · esm
@@ -58,10 +35,10 @@ npx eslint --init
 ✔ What format do you want your config file to be in? · JSON
 ```
 
-##### Prettier
+
 
 ```console[terminal]
-npm i prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
+yarn add -D prettier eslint-config-prettier eslint-plugin-prettier babel-eslint eslint-plugin-react@latest eslint-config-airbnb@latest
 ```
 
 #### Editando/ Criando arquivos
@@ -126,6 +103,9 @@ charset = utf-8
 trim_trailing_whitespace = false
 insert_final_newline = false
 ```
+
+
+## Nas preferências do usuário (só fazer uma vez!!!)
 
 ```json[settings.json]
 {

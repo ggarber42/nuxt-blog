@@ -13,3 +13,21 @@ jupyter notebook
 ```
 
 ![](/img/screenshot-from-2021-02-27-22-27-53.png)
+
+### Puxando detalhes de uma coluna
+
+Primeiro podemos referenciar uma coluna com a seguinte notaçao `df.race`
+
+``
+
+![](/img/screenshot-from-2021-05-05-22-39-31.png)
+
+``
+
+Utilizando essa notaçao podemos chamar o metodo `describe()` 
+
+![](/img/screenshot-from-2021-05-05-22-41-20.png)
+
+E como a propriedade que queremos e o unique, podemos chamar da seguinte forma `df.race.describe()["unique"]` 
+
+![](/img/screenshot-from-2021-05-05-22-43-17.png)

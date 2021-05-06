@@ -16,7 +16,7 @@ jupyter notebook
 
 ### Puxando detalhes de uma coluna
 
-Primeiro podemos referenciar uma coluna com a seguinte notaçao `df.race`
+Primeiro podemos referenciar uma coluna com a seguinte notaçao **df.race**
 
 ``
 
@@ -24,10 +24,14 @@ Primeiro podemos referenciar uma coluna com a seguinte notaçao `df.race`
 
 ``
 
-Utilizando essa notaçao podemos chamar o metodo `describe()` 
+Utilizando essa notaçao podemos chamar o metodo **describe()**
 
 ![](/img/screenshot-from-2021-05-05-22-41-20.png)
 
-E como a propriedade que queremos e o unique, podemos chamar da seguinte forma `df.race.describe()["unique"]` 
+E como a propriedade que queremos e o unique, podemos chamar da seguinte forma **df.race.describe()\["unique"]**
 
 ![](/img/screenshot-from-2021-05-05-22-43-17.png)
+
+
+
+![](/img/screenshot-from-2021-05-05-23-04-19.png)

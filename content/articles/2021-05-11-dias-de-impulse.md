@@ -40,3 +40,7 @@ curl --request PUT \
 "MetaVersion": "IU"
 }'
 ```
+
+passando a query
+?impulseSuiteEnv=dev
+

@@ -8,28 +8,36 @@ description: impulsinando
 
 ## Freewilly
 
-# Baixando coisas
+### Baixando as coisas
 
 ```bash
 fw suite install etna
 ```
 enta no caso  a <api_key>
 
-# Subindi suite
+### Subindo suite
 
 ```bash
 fw suite up etna
 ```
 
+# Task de Tagueamento
+
 Ativando o impulse via backend
 
 https://share.linx.com.br/pages/viewpage.action?pageId=170018266
+
+O comando abaixo retorna se a ApiKey está ativa
 
 ```bash
 curl --request GET \
 --url 'https://www.maisvaidosa.com.br/app/impulse/config?token=b6e6db6e-467c-4de8-8f5e-e22c7565da81' \
 --header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
+```
 
+Atualiza os campos para enable e também adiciona pedaços que faltam no JSON.
+
+```bash
 curl --request PUT \
 --url 'https://www.maisvaidosa.com.br/app/impulse/config?token=b6e6db6e-467c-4de8-8f5e-e22c7565da81' \
 --header 'content-type: application/json' \

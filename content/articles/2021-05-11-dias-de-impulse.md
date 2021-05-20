@@ -1,10 +1,9 @@
 ---
 title: Dias de impulse
 date: 2021-05-11T15:42:19.534Z
-description: impulsinando
+description: impulsionando
 ---
 # Comandos recorrentes
-
 
 ## Freewilly
 
@@ -13,6 +12,7 @@ description: impulsinando
 ```bash
 fw suite install etna
 ```
+
 enta no caso  a <api_key>
 
 ### Subindo suite
@@ -52,3 +52,20 @@ curl --request PUT \
 passando a query
 ?impulseSuiteEnv=dev
 
+## Dias de jake
+
+![](/img/screenshot-from-2021-05-20-17-50-24.png)
+
+![](/img/screenshot-from-2021-05-20-17-51-28.png)
+
+![](/img/screenshot-from-2021-05-20-17-51-28.png)
+
+```bash
+$ git add -i
+```
+
+![](/img/screenshot-from-2021-05-20-17-56-05.png)
+
+```bash
+$ zcat json/drogasil-busca-1-local.json.gz | grep 13086 | jq .name
+```

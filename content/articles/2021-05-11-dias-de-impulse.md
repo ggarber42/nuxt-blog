@@ -69,3 +69,9 @@ $ git add -i
 ```bash
 $ zcat json/drogasil-busca-1-local.json.gz | grep 13086 | jq .name
 ```
+
+![](/img/screenshot-from-2021-05-20-17-56-05.png)
+
+```bash
+$ xmllint --format --nocdata drogasil-busca-1-local | grep -A 30 -B 2 13086
+```

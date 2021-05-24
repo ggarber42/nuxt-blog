@@ -11,7 +11,12 @@ description: impulsionando
 
 ```bash
 fw suite install etna
+cd na pasta
+npm run clean
+npm run bootstrap
 ```
+
+o bootstrap pode dar erro varias vezes
 
 enta no caso  a <api_key>
 

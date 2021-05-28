@@ -57,6 +57,14 @@ curl --request PUT \
 passando a query
 ?impulseSuiteEnv=dev
 
+### Depois do merge
+
+Rodar o comando pra gerar uma nova versao (abre o circleCI)
+
+ ```bash
+$ npm run release
+```
+
 ## Dias de jake
 
 ![](/img/screenshot-from-2021-05-20-17-50-24.png)

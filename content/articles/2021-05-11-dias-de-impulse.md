@@ -65,7 +65,7 @@ Rodar o comando pra gerar uma nova versao (abre o circleCI)
 $ npm run release
 ```
 
-### saru
+### Saru
 
 Rodar esse comando para configurar
 
@@ -104,3 +104,6 @@ $ zcat json/drogasil-busca-1-local.json.gz | grep 13086 | jq .name
 ```bash
 $ xmllint --format --nocdata drogasil-busca-1-local | grep -A 30 -B 2 13086
 ```
+
+### Dias de Shopback
+

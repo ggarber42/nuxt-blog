@@ -21,6 +21,13 @@ df.head()
 
 ![](/img/screenshot-from-2021-02-27-22-27-53.png)
 
+Pegando o tamanho da tabela
+```python
+df.shape
+```
+
+
+
 ### Puxando detalhes de uma coluna
 
 Primeiro podemos referenciar uma coluna com a seguinte notaçao **df.race**

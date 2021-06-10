@@ -3,9 +3,7 @@ title: Dias de impulse
 date: 2021-05-11T15:42:19.534Z
 description: impulsionando
 ---
-# Comandos recorrentes
-
-## Freewilly
+# Freewilly
 
 ### Baixando as coisas
 
@@ -65,7 +63,7 @@ Rodar o comando pra gerar uma nova versao (abre o circleCI)
 $ npm run release
 ```
 
-### Saru
+# Saru
 
 Rodar esse comando para configurar
 
@@ -105,5 +103,14 @@ $ zcat json/drogasil-busca-1-local.json.gz | grep 13086 | jq .name
 $ xmllint --format --nocdata drogasil-busca-1-local | grep -A 30 -B 2 13086
 ```
 
-### Dias de Shopback
+# Dias de Shopback
 
+# Dias de Onsite
+
+```bash
+fw install apikey
+cd na pasta
+npm run clean
+npm run bootstrap
+fw up apikey
+```

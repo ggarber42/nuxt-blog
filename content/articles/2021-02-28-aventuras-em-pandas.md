@@ -11,6 +11,13 @@ source .venv/bin/activate
 pip install jupyterlab pandas
 jupyter notebook
 ```
+Puxando um resumo do df:
+
+```python
+import pandas as pd
+df = pd.read_csv('./survey_results_public.csv')
+df.head()
+```
 
 ![](/img/screenshot-from-2021-02-27-22-27-53.png)
 

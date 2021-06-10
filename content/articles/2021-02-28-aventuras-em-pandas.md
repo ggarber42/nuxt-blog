@@ -36,6 +36,14 @@ df.info()
 
 ![](/img/screenshot-from-2021-06-09-22-00-31.png)
 
+Podemos setar o tamanho do print do dataframe:
+
+
+```python
+pd.set_option('display.max_columns',85)
+```
+
+
 ### Puxando detalhes de uma coluna
 
 Primeiro podemos referenciar uma coluna com a seguinte notaçao **df.race**

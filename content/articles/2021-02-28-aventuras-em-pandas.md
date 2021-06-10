@@ -11,6 +11,7 @@ source .venv/bin/activate
 pip install jupyterlab pandas
 jupyter notebook
 ```
+
 Puxando um resumo do df:
 
 ```python
@@ -21,12 +22,19 @@ df.head()
 
 ![](/img/screenshot-from-2021-02-27-22-27-53.png)
 
-Pegando o tamanho da tabela
+Pegando o tamanho da tabela (resumo)
+
 ```python
 df.shape
 ```
 
+ou com detalhes
 
+```python
+df.info()
+```
+
+![](/img/screenshot-from-2021-06-09-22-00-31.png)
 
 ### Puxando detalhes de uma coluna
 
@@ -55,7 +63,5 @@ E como a propriedade que queremos e o unique, podemos chamar da seguinte forma *
 ### Porcetagem
 
 shape\[0] pega a linha
-
-
 
 ![](/img/screenshot-from-2021-05-05-23-51-55.png)

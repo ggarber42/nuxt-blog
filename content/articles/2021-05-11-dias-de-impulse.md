@@ -23,9 +23,13 @@ enta no caso  a <api_key>
 fw suite up etna
 ```
 
-## Querystring
+### Querystring
 
-?impulseSuiteEnv=dev
+#### ?impulseSuiteEnv=dev
+
+### Deploy
+
+Depois do commit, se faz o PR, code review, rodar e depois um job no circle ci
 
 Ativando o impulse via backend
 

@@ -29,7 +29,7 @@ fw suite up etna
 
 ### Deploy
 
-Depois do commit, se faz o PR, code review, rodar e depois um job no circle ci
+Depois do commit, se faz o PR, code review, rodar o release e depois um job no circle ci
 
 Ativando o impulse via backend
 

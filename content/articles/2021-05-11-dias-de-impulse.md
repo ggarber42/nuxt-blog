@@ -3,9 +3,8 @@ title: Dias de impulse
 date: 2021-05-11T15:42:19.534Z
 description: impulsionando
 ---
-# Freewilly
 
-### Baixando as coisas
+# Task de Tagueamento
 
 ```bash
 fw suite install etna
@@ -24,7 +23,9 @@ enta no caso  a <api_key>
 fw suite up etna
 ```
 
-# Task de Tagueamento
+## Querystring
+
+?impulseSuiteEnv=dev
 
 Ativando o impulse via backend
 
@@ -51,9 +52,6 @@ curl --request PUT \
 "MetaVersion": "IU"
 }'
 ```
-
-passando a query
-?impulseSuiteEnv=dev
 
 ### Depois do merge
 

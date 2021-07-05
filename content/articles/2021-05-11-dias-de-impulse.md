@@ -27,6 +27,12 @@ fw suite up etna
 
 #### ?impulseSuiteEnv=dev
 
+### Flags JSON
+
+Muitas vezes as flags no se adequam ao projeto (possuem campos como true que não estão habilitados)
+
+Pra resolver, se faz um PUT em https://clients.chaordicsystems.com/clients/[APIKEY] com o campo no body o que se tem do GET. Mas com as flags atualizadas.
+
 ### Deploy
 
 Depois do commit, se faz o PR, code review, rodar o release e depois um job no circle ci
